@@ -1,2 +1,2 @@
-# Bomberman
-Bomberman multi-joueurs en temps réel 
+# Chess
+Jeu d'echecs en JavaScript. 
