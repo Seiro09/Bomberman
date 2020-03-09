@@ -25,75 +25,69 @@ class Position2D {
 class Pion {
   constructor() {
     this.position = new Position2D();
+    this.src = "https://library.kissclipart.com/20181007/wq/kissclipart-pawn-chess-sprite-clipart-chess-piece-pawn-fb6e2722e253d586.jpg";
     console.log("nouveau pion en " + this.position.log());
   }
   
+  //place le pion sur le plateau
   affiche(){
-    let td = document.getElementById('Case' + this.position.x + this.position.y);
+    let td = this.getCase();
     let piece = document.createElement('img');
     td.appendChild(piece);
-    let me = this;
-    piece.src = 'https://library.kissclipart.com/20181007/wq/kissclipart-pawn-chess-sprite-clipart-chess-piece-pawn-fb6e2722e253d586.jpg';
+    let me = this; //se copier pour les fonctions ou le this n'est plus possible
+    piece.src = this.src;
     piece.width = tailleCase/2;
     piece.height = tailleCase/2;
     piece.style.margin = '' + tailleCase/4 + 'px ' + tailleCase/4 + 'px';
-    piece.addEventListener('click', function(e){
-      me.selectNewCase(me,me.position.x,me.position.y);
+    this.setSelectionnable();
+  }
+  
+  //rendre le pion sélectionnable
+  setSelectionnable(){
+    let me = this;
+    this.getImg().addEventListener('click', function(e){
+      me.selectNewCase();
     })
-    this.position.log();
   }
   
+  setNonSelectionnable(){
+    this.getImg().removeEventListener('click');
+  }
+  
+  //return la case <td> associé au pion
+  getCase(){
+    return document.getElementById('Case' + this.position.x + this.position.y);
+  }
+  
+  //return l'image <img associé au pion>
+  getImg(){
+    return this.getCase().firstElementChild;
+  }
+  
+  //deplace le pion su la case indiqué
   move(x,y){
-    let td = document.getElementById('Case' + this.position.x + this.position.y);
-    let child = td.removeChild(td.firstChild);
-    this.position.set(x,y);
-    td = document.getElementById('Case' + this.position.x + this.position.y);
-    td.appendChild(child);
+    if(x != this.position.x || y != this.position.y) {
+      let td = document.getElementById('Case' + this.position.x + this.position.y);
+      let child = td.removeChild(td.firstChild);
+      this.position.set(x,y);
+      td = document.getElementById('Case' + this.position.x + this.position.y);
+      td.appendChild(child);
+    }
   }
   
-  selectNewCase(pion,xp,yp){
+  //rendre les cases disponibles a la selection
+  selectNewCase(){
     let td;
     for(let y = 0; y < nombreCases; y++){
       for(let x = 0; x < nombreCases; x++){
         td = document.getElementById('Case' + x + y);
-        td.style.color = 'cyan';
-        if(!(xp == x && yp == y)){
-          td.onmouseenter = function(e){
-            e.target.style.backgroundColor = 'cyan';
-          }
-          td.onmouseout = function(e){
-            if(e.target.getAttribute('class') == 'whiteCase'){
-              e.target.style.backgroundColor = 'white';
-            }
-            else {
-              e.target.style.backgroundColor = 'maroon';
-            }
-          }
-          td.onclick = function(e){
-            console.log("move to " + e.target.id);
-            let td2;
-            for(let sy = 0; sy < nombreCases; sy++){
-              for(let sx = 0; sx < nombreCases; sx++){
-                td2 = document.getElementById('Case' + sx + sy);
-                td2.style.color = 'black';
-                td2.onmouseenter = td2.onmouseout = td2.onclick = '';
-                if(td2.getAttribute('class') == 'whiteCase'){
-                  td2.style.backgroundColor = 'white';
-                }
-                else {
-                  td2.style.backgroundColor = 'maroon';
-                }
-              }
-            }
-            let a = parseInt(e.target.id.charAt(4));
-            let b = parseInt(e.target.id.charAt(5));
-            pion.move(a,b);
-          }
+        
+        if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
+          setCaseSelectionnable(td,this);
         }
-        else {
-          td.onmouseup = function(e){
-            e.target.
-          }
+        
+        else { //actions sur la case du pion
+          //setCaseSelectionnable(td,this);
         }
       }
     }
@@ -104,6 +98,7 @@ class Pion {
   plateauEchec();
   let pion = new Pion();
   pion.affiche();
+  pion.getImg();
 })();
 
 function plateauEchec(){
@@ -133,7 +128,6 @@ function plateauEchec(){
       else {
         td.setAttribute('class', 'blackCase');
       }
-      
       tr.appendChild(td);
     }
     table.appendChild(tr);
@@ -141,19 +135,42 @@ function plateauEchec(){
 }
 
 
-function setSelectionnable(td){
+//la case td du tableau donné en parametre devient disponible pour le placement du pion
+function setCaseSelectionnable(td,pion){
+  td.onmouseenter = function(e){ //la case devient bleu si elle est survolée
+    e.target.style.backgroundColor = 'cyan';
+  }
+  td.onmouseout = function(e){ //la case redevient de sa couleur d'origine
+    if(e.target.getAttribute('class') == 'whiteCase'){
+      e.target.style.backgroundColor = 'white';
+    }
+    else {
+      e.target.style.backgroundColor = 'maroon';
+    }
+  }
+  td.style.color = 'cyan';
   
+  td.onclick = function(e){ //si l'on sélectionne la case
+    console.log("move to " + e.target.id);
+    let td2;
+    for(let sy = 0; sy < nombreCases; sy++){
+      for(let sx = 0; sx < nombreCases; sx++){
+        resetCase(document.getElementById('Case' + sx + sy));
+      }
+    }
+    let a = parseInt(e.target.id.charAt(4));
+    let b = parseInt(e.target.id.charAt(5));
+    pion.move(a,b);
+  }
 }
-/*
-td.onmouseenter = function(e){
-  e.target.style.backgroundColor = 'cyan';
-}
-td.onmouseout = function(e){
-  if(e.target.getAttribute('class') == 'whiteCase'){
-    e.target.style.backgroundColor = 'white';
+
+function resetCase(td){
+  td.style.color = 'black';
+  td.onmouseenter = td.onmouseout = td.onclick = '';
+  if(td.getAttribute('class') == 'whiteCase'){
+    td.style.backgroundColor = 'white';
   }
   else {
-    e.target.style.backgroundColor = 'maroon';
+    td.style.backgroundColor = 'maroon';
   }
 }
-*/
