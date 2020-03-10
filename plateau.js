@@ -2,9 +2,12 @@ var tailleCase = 70;
 var nombreCases = 8;
 
 class Position2D {
-  constructor() {
-    this.x = 0;
-    this.y = 0;
+  constructor(x,y) {
+    if(x == undefined) this.x = 0;
+    else this.x = x;
+    if(y == undefined) this.y = 0;
+    else this.y = y;
+    
   }
   
   log(){
@@ -23,8 +26,8 @@ class Position2D {
 }
 
 class Pion {
-  constructor() {
-    this.position = new Position2D();
+  constructor(x,y) {
+    this.position = new Position2D(x,y);
     this.src = "https://library.kissclipart.com/20181007/wq/kissclipart-pawn-chess-sprite-clipart-chess-piece-pawn-fb6e2722e253d586.jpg";
     console.log("nouveau pion en " + this.position.log());
   }
