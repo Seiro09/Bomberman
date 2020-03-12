@@ -40,6 +40,7 @@ class Pion {
   
   //construit le pion
   constructor(color,x,y) {
+    this.deplace = true;
     this.position = new Position2D(x,y);
     this.src = "https://cdn.glitch.com/cc360787-9153-4d34-a2e2-ddbd9bc2b9e4%2FBlackPawn.png?v=1583876671281";
     this.color = color;
@@ -63,17 +64,18 @@ class Pion {
   
   //activer l'évènement permettant à l'utilisateur de le choisir pour le déplacer
   setSelectable(){
-    console.log("seletable");
+    this.deplace = true;
     let me = this; //se copier pour les fonctions ou le this n'est plus possible
     let img = this.getImg();
     if(img != undefined) img.addEventListener('click', function(e){
+      me.setNonSelectable();
       me.selectNewCase();
     });
   }
   
   //retire l'évènement permettant de le déplacer
   setNonSelectable(){
-    this.delete();
+    this.deplace = false;
   }
   
   //return la case <td> associé au pion
@@ -114,12 +116,24 @@ class Pion {
   */
   selectNewCase(){
     let td;
-    console.log(this.position.log())
     for(let y = 0; y < nombreCases; y++){
       for(let x = 0; x < nombreCases; x++){
         td = document.getElementById('Case' + x + y);
-        console.log("modifPieces")
-        setCaseSelectionnable(td,this);
+        
+        if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
+          setCaseSelectionnable(td,this);
+          console.log("modifPieces")
+        }
+        
+        else { //actions sur la case du pion (fonctionne pas -_-)
+          console.log("annule deplacement");
+          let img = this.getImg();
+          img.onmouseclick = function(e){
+            
+            resetAllCases();
+            this.setSelectable();
+          }
+        }
       }
     }
   }
@@ -206,6 +220,7 @@ function resize(){
 (function main(){
   plateauEchec();
   refreshPions();
+  pions[0].setNonSelectable();
 })();
 
 /*
@@ -218,8 +233,6 @@ function resize(){
 function setCaseSelectionnable(td,pion){
   //couleur de discernement de la case pour être choisit pour le déplacement (rouge si un pion se trouve déjà sur la case)
   var newClass = (td.firstChild == undefined)? 'selectCase' : 'selectCollision';
-  
-  if(parseInt(td.id.charAt(4) == pion.position.x)
   
   td.className = newClass; //ajoute un contour pour indiquer que la case peut être choisit
   
