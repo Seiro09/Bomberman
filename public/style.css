@@ -1,0 +1,198 @@
+/*#entete {
+  padding-top:10px;
+  border-style : outset;
+  border-color: #393939;
+  border-width: 0.5em;
+  width : 100-10vw;
+  height : 1em;
+  text-align : center;
+  font-family : monospace, sans-serif;
+  font-size : 5vw;
+  font-weight: 100%;
+  color: black;
+  
+}*/
+
+
+#jeu {
+  border-style : groove;
+  margin-top : 1%;
+}
+
+
+/*@media all and (orientation: landscape) and (min-width: 1500px) {
+  #header {
+    border-style : outset;
+    border-color: blue;
+    border-width: 2vh;
+    padding: 1px;
+    text-align: center;
+    color: black;
+    font-size: 5vh;
+  }
+}*/
+
+#tableEchec {
+  border-style : solid;
+  border-width: thin;
+  color : black;
+  margin : auto auto;
+  background-color : white;
+  margin-top : 10px;
+  margin-bottom : 10px;
+  border-collapse: collapse;
+}
+
+
+@media all and (orientation: portrait) {
+    #header {
+    border-style : outset;
+    border-color: #393939;
+    border-width: 2vh;
+    padding: 1px;
+    text-align: center;
+    color: black;
+    font-size: 3vh;
+
+  }
+  
+  #tableEchec .whiteCase {
+    border-width: thin;
+    border-style : solid;
+    background-color : white;
+    overflow: hidden;
+    line-height: 0;
+    width:7vw;
+    height: 7vw;
+
+  }
+
+  #tableEchec .blackCase {
+    border-width: thin;
+    border-style : solid;
+    background-color : black;
+    overflow: hidden;
+    line-height: 0;
+    width:7vw;
+    height: 7vw;
+
+  }
+  
+    #tableEchec .selectCase {
+    border-width: thin;
+    border-style : solid;
+    background-color : YellowGreen;
+    overflow: hidden;
+    line-height: 0;
+    width:7vw;
+    height: 7vw;
+  }
+  
+  #tableEchec .selectCollision {
+    border-width: thin;
+    border-style : solid;
+    background-color : red;
+    overflow: hidden;
+    line-height: 0;
+    width:7vw;
+    height: 7vw;
+  }
+}
+
+@media all and (orientation: landscape){
+   #header {
+    border-style : outset;
+    border-color: #393939;
+    border-width: 2vh;
+    padding: 1px;
+    text-align: center;
+    color: black;
+    font-size: 5vh;
+
+  }
+  
+  #tableEchec .whiteCase {
+    border-width: thin;
+    border-style : solid;
+    background-color : white;
+    overflow: hidden;
+    line-height: 0;
+    width:7vh;
+    height: 7vh;
+
+  }
+
+  #tableEchec .blackCase {
+    border-width: thin;
+    border-style : solid;
+    background-color : black;
+    overflow: hidden;
+    line-height: 0;
+    width:7vh;
+    height: 7vh;
+  }
+  
+  #tableEchec .selectCase {
+    border-width: thin;
+    border-style : solid;
+    background-color : YellowGreen;
+    overflow: hidden;
+    line-height: 0;
+    width:7vh;
+    height: 7vh;
+  }
+  
+  #tableEchec .selectCollision {
+    border-width: thin;
+    border-style : solid;
+    background-color : red;
+    overflow: hidden;
+    line-height: 0;
+    width:7vh;
+    height: 7vh;
+  }
+}
+
+
+/*@media all and (min-width: 301px) and (max-width: 600px){
+   #header {
+    border-style : outset;
+    border-color: #393939;
+    border-width: 2vh;
+    padding: 1px;
+    text-align: center;
+    color: black;
+    font-size: 4vh;
+  }
+  
+  #tableEchec .whiteCase {
+    border-width: thin;
+    border-style : solid;
+    background-color : white;
+    overflow: hidden;
+    line-height: 0;
+    width:7vh;
+    height: 7vh;
+  }
+  #tableEchec .blackCase {
+    border-width: thin;
+    border-style : solid;
+    background-color : black;
+    overflow: hidden;
+    line-height: 0;
+    width:7vh;
+    height: 7vh;
+  }
+}*/
+
+
+/*mes tests*/
+/*
+#Case12 {
+  color : blue;
+  background-color : white;
+}
+*/
+/*#tableEchec tr :hover {
+  color : cyan;
+}*/
