@@ -67,20 +67,13 @@ class Pion {
     let me = this; //se copier pour les fonctions ou le this n'est plus possible
     let img = this.getImg();
     if(img != undefined) img.addEventListener('click', function(e){
-      me.setNonSelectable();
       me.selectNewCase();
     });
   }
   
   //retire l'évènement permettant de le déplacer
   setNonSelectable(){
-    console.log("non seletable");
-    let me = this;
-    let img = this.getImg();
-    if(img != undefined) img.removeEventListener('click', function(e){
-      me.setNonSelectable();
-      me.selectNewCase();
-    });
+    this.delete();
   }
   
   //return la case <td> associé au pion
@@ -121,23 +114,12 @@ class Pion {
   */
   selectNewCase(){
     let td;
+    console.log(this.position.log())
     for(let y = 0; y < nombreCases; y++){
       for(let x = 0; x < nombreCases; x++){
         td = document.getElementById('Case' + x + y);
         console.log("modifPieces")
-        if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
-          setCaseSelectionnable(td,this);
-        }
-        
-        else { //actions sur la case du pion (fonctionne pas -_-)
-          console.log("annule deplacement");
-          let img = this.getImg();
-          img.onmouseclick = function(e){
-            
-            resetAllCases();
-            //this.setSelectable();
-          }
-        }
+        setCaseSelectionnable(td,this);
       }
     }
   }
@@ -236,6 +218,8 @@ function resize(){
 function setCaseSelectionnable(td,pion){
   //couleur de discernement de la case pour être choisit pour le déplacement (rouge si un pion se trouve déjà sur la case)
   var newClass = (td.firstChild == undefined)? 'selectCase' : 'selectCollision';
+  
+  if(parseInt(td.id.charAt(4) == pion.position.x)
   
   td.className = newClass; //ajoute un contour pour indiquer que la case peut être choisit
   
