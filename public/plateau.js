@@ -66,6 +66,7 @@ class Pion {
     let me = this; //se copier pour les fonctions ou le this n'est plus possible
     let img = this.getImg();
     if(img != undefined) img.addEventListener('click', function(e){
+      me.setNonSelectable();
       me.selectNewCase();
     });
   }
@@ -120,12 +121,14 @@ class Pion {
         
         if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
           setCaseSelectionnable(td,this);
+          console.log("modifPieces")
         }
         
         else { //actions sur la case du pion (fonctionne pas -_-)
+          console.log("annule deplacement");
           let img = this.getImg();
           img.onmouseclick = function(e){
-            console.log("annule deplacement");
+            
             resetAllCases();
             this.setSelectable();
           }
