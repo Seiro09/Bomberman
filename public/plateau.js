@@ -63,6 +63,7 @@ class Pion {
   
   //activer l'évènement permettant à l'utilisateur de le choisir pour le déplacer
   setSelectable(){
+    console.log("seletable");
     let me = this; //se copier pour les fonctions ou le this n'est plus possible
     let img = this.getImg();
     if(img != undefined) img.addEventListener('click', function(e){
@@ -73,6 +74,7 @@ class Pion {
   
   //retire l'évènement permettant de le déplacer
   setNonSelectable(){
+    console.log("non seletable");
     let me = this;
     let img = this.getImg();
     if(img != undefined) img.removeEventListener('click', function(e){
@@ -122,10 +124,9 @@ class Pion {
     for(let y = 0; y < nombreCases; y++){
       for(let x = 0; x < nombreCases; x++){
         td = document.getElementById('Case' + x + y);
-        
+        console.log("modifPieces")
         if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
           setCaseSelectionnable(td,this);
-          console.log("modifPieces")
         }
         
         else { //actions sur la case du pion (fonctionne pas -_-)
@@ -134,7 +135,7 @@ class Pion {
           img.onmouseclick = function(e){
             
             resetAllCases();
-            this.setSelectable();
+            //this.setSelectable();
           }
         }
       }
