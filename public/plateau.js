@@ -73,8 +73,12 @@ class Pion {
   
   //retire l'évènement permettant de le déplacer
   setNonSelectable(){
+    let me = this;
     let img = this.getImg();
-    if(img != undefined) img.removeEventListener('click');
+    if(img != undefined) img.removeEventListener('click', function(e){
+      me.setNonSelectable();
+      me.selectNewCase();
+    });
   }
   
   //return la case <td> associé au pion
