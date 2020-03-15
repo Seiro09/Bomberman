@@ -58,6 +58,7 @@ class Pion {
     piece.src = this.src;
     piece.width = squareSize;
     piece.height = squareSize;
+    piece.id = "_img" + this.position.x + this.position.y;
     //piece.style.margin = '' + tailleCase/4 + 'px ' + tailleCase/4 + 'px';
   }
   
@@ -105,7 +106,6 @@ class Pion {
         
         if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
           setCaseSelectionnable(td,this);
-          console.log("modifPieces");
         }
         
         else { //actions sur la case du pion (fonctionne pas -_-)
@@ -241,24 +241,32 @@ var destination = undefined;
 function eventTableEchec(event){
   let x = parseInt(event.target.id.charAt(4));
   let y = parseInt(event.target.id.charAt(5));
+  console.log("click en " + x + "," + y);
   if(source == undefined){
+    console.log("definition de la source : ")
     let i = getPion(x,y);
     if(i != undefined) pion_a_deplacer = pions[i];
     if(pion_a_deplacer != undefined){
       source = new Position2D(x,y);
       pion_a_deplacer.selectNewCase();
+      console.log("source défini");
     }
   }
   else {
+    console.log("source déjà défini");
     if(x == source.x && y == source.y){
       pion_a_deplacer = undefined;
       source = undefined;
+      resetAllCases();
+      console.log("suppression de la source");
     }
     else {
+      console.log("definition de la destination")
       if(event.target.className == 'selectCase'){
         pion_a_deplacer.move(x,y);
         pion_a_deplacer = undefined;
         source = undefined;
+        resetAllCases();
       }
       else if(event.target.className == 'selectCollision'){
         
