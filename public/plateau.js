@@ -128,7 +128,8 @@ function refreshPions(){
 
 function getPion(x,y){
   for(let i = 0; i < pions.length; i++) {
-    if(pions[i].position.x == x && pions[i].position.y == y) return i;
+    if(pions[i] != undefined)
+      if(pions[i].position.x == x && pions[i].position.y == y) return i;
   }
   return undefined;
 }
