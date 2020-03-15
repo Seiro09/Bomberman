@@ -159,7 +159,7 @@ function plateauEchec(){
   plateau.appendChild(table);
   
   table.setAttribute('id', 'tableEchec');
-  
+  table.addEventListener('click',eventTableEchec);
   for(let y = 0; y < nombreCases; y++){
     tr = document.createElement('tr');
     tr.setAttribute('id','row' + y);
@@ -234,5 +234,6 @@ function resetCase(td) {
 }
 
 function eventTableEchec(event){
-  
+  console.log(event.currentTarget.currentTarget.id);
 }
+
