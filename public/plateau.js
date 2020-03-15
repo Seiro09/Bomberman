@@ -40,7 +40,6 @@ class Pion {
   
   //construit le pion
   constructor(color,x,y) {
-    this.deplace = true;
     this.position = new Position2D(x,y);
     this.src = "https://cdn.glitch.com/cc360787-9153-4d34-a2e2-ddbd9bc2b9e4%2FBlackPawn.png?v=1583876671281";
     this.color = color;
@@ -204,13 +203,18 @@ function resize(){
 function setCaseSelectionnable(td,pion){
   //couleur de discernement de la case pour être choisit pour le déplacement (rouge si un pion se trouve déjà sur la case)
   var newClass = (td.firstChild == undefined)? 'selectCase' : 'selectCollision';
-  let i = getPion(parseInt(td.id.charAt(4)),parseInt(td.id.charAt(5)));
-  if(i != undefined) {
-    if(newClass == 'selectCollision'){
-      
+  
+  if(newClass == 'selectCollision'){
+    let i = getPion(parseInt(td.id.charAt(4)),parseInt(td.id.charAt(5)));
+    if(i != undefined) {
+      if(pions[i].color != pion.color){
+        td.className = newClass;
+      }
     }
   }
-  td.className = newClass;
+  else {
+    td.className = newClass;
+  }
 }
 
 //supprime les évènements et rends les couleurs d'origine à toutes les cases du plateau
