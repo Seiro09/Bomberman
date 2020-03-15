@@ -83,12 +83,12 @@ class Pion {
       td = this.getCase();
       td.appendChild(child);
     }
-    
   }
   
   //Efface le pion de sa position, retire son image du plateau
   delete(){
     let td = this.getCase();
+    console.log("suppresion de " + td.id);
     let img = td.lastChild;
     if(img != undefined) td.removeChild(img);
   }
@@ -272,10 +272,10 @@ function eventTableEchec(event){
         let j = getPion(x,y);
         let pion_a_retirer;
         if(j != undefined) {
-          pions[j]
+          pions[j].delete();
           pions[j] = undefined;
         }
-        //pion_a_deplacer.move(x,y);
+        pion_a_deplacer.move(x,y);
         source = undefined;
         resetAllCases();
       }
