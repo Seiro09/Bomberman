@@ -191,7 +191,6 @@ function resize(){
 (function main(){
   plateauEchec();
   refreshPions();
-  pions[0].setNonSelectable();
 })();
 
 /*
@@ -233,7 +232,11 @@ function resetCase(td) {
   }
 }
 
+var pion_a_deplacer = undefined;
+var source = undefined;
+var destination = undefined;
+
 function eventTableEchec(event){
-  console.log(event.currentTarget.currentTarget.id);
+  let x = event.target.id.charAt(4);
 }
 
