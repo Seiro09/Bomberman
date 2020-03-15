@@ -49,7 +49,6 @@ class Pion {
   
   /*
   * place le pion sur le plateau en ajoutant la photo du pion associé à l'instance du pion
-  * active l'évènement de sélection (voir doc "setSelectable()")
   */
   affiche(){
     let td = this.getCase();
@@ -73,7 +72,7 @@ class Pion {
   }
   
   /*
-  * deplace le pion su la case indiqué en retirant l'image de l'ancienne case et l'ajoute à la nouvelle
+  * deplace le pion su la case indiqué
   */
   move(x,y){
     if(x != this.position.x || y != this.position.y) {
@@ -108,7 +107,7 @@ class Pion {
         td = document.getElementById('Case' + x + y);
         
         if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
-          if(this.position.x - x == this.position.y - y){
+          if(abs(this.position.x - x) == abs(this.position.y - y)){
              setCaseSelectionnable(td,this);
           }
         }
@@ -118,7 +117,7 @@ class Pion {
 }
 
 //tableau de pions
-var pions = [new Pion('white',0,0), new Pion('black',1,0)];
+var pions = [new Pion('white',2,0), new Pion('black',4,0)];
 
 //supprime la photo du pion et la rajoute sur le plateau, pour refresh l'affichage
 function refreshPions(){
@@ -200,17 +199,18 @@ function resize(){
 })();
 
 /*
-* la case <td> du tableau donné en parametre devient disponible pour le placement du pion
-* modifie la couleur de la case afin que l'utilisateur puisses la discerner des autres cases
-* ajoute des évènements comme le survolement qui insiste sur le discernement des cases
-* l'évènement de click définit le choix de l'utilisateur pour le déplacement du pion
-* et supprime la modification de couleurs permettant de discerner les cases et supprime les autres évènements
+* 
 */
 function setCaseSelectionnable(td,pion){
   //couleur de discernement de la case pour être choisit pour le déplacement (rouge si un pion se trouve déjà sur la case)
   var newClass = (td.firstChild == undefined)? 'selectCase' : 'selectCollision';
-  
-  td.className = newClass; //ajoute un contour pour indiquer que la case peut être choisit
+  let i = getPion(parseInt(td.id.charAt(4)),parseInt(td.id.charAt(5)));
+  if(i != undefined) {
+    if(newClass == 'selectCollision'){
+      
+    }
+  }
+  td.className = newClass;
 }
 
 //supprime les évènements et rends les couleurs d'origine à toutes les cases du plateau
@@ -224,11 +224,9 @@ function resetAllCases(){
 
 /*
 * la case donnée en paramètre est réinitialisée
-* suppression des évènements s'ils existent
-* et modification de la couleur pour la couleur d'origine de la case
+* avec modification de la couleur pour la couleur d'origine de la case
 */
 function resetCase(td) {
-  td.onmouseenter = td.onmouseout = td.onclick = '';
   let color = parseInt(td.id.charAt(4)) + parseInt(td.id.charAt(5));
   if(color % 2 == 0){
     td.className = 'whiteCase';
@@ -245,33 +243,26 @@ var destination = undefined;
 function eventTableEchec(event){
   let x = parseInt(event.target.id.charAt(4));
   let y = parseInt(event.target.id.charAt(5));
-  console.log("click en " + x + "," + y);
-  if(source == undefined){
-    console.log("definition de la source : ")
+  if(source == undefined){ //définit la position de départ (si un pion est présent)
     let i = getPion(x,y);
     if(i != undefined) pion_a_deplacer = pions[i];
     if(pion_a_deplacer != undefined){
       source = new Position2D(x,y);
       pion_a_deplacer.selectNewCase();
-      console.log("source défini");
     }
   }
-  else {
-    console.log("source déjà défini");
-    if(x == source.x && y == source.y){
+  else { //si la source est déjà définit
+    if(x == source.x && y == source.y){ //on annule la sélection du pion en cliquant à nouveau sur la source
       source = undefined;
       resetAllCases();
-      console.log("suppression de la source");
     }
-    else {
-      console.log("definition de la destination")
-      if(event.target.className == 'selectCase'){
+    else { //la case n'est pas la position source
+      if(event.target.className == 'selectCase'){ //la case est accessible par le pion
         pion_a_deplacer.move(x,y);
         source = undefined;
         resetAllCases();
       }
-      else if(event.target.id == '_img' + x + y && document.getElementById('Case' + x + y).className == 'selectCollision'){
-        console.log("pion a manger " + event.target.id);
+      else if(event.target.id == '_img' + x + y && document.getElementById('Case' + x + y).className == 'selectCollision'){ //la case contient un autre pion
         let j = getPion(x,y);
         if(j != undefined) {
           pions[j].delete();
@@ -286,5 +277,5 @@ function eventTableEchec(event){
 }
 
 function abs(valeur){
-  return (valeur > 0)
+  return (valeur > 0)? valeur : -valeur;
 }
