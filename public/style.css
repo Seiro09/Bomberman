@@ -97,6 +97,16 @@
     width:7vw;
     height: 7vw;
   }
+  
+  #tableEchec .casePion {
+    border-width: thin;
+    border-style : solid;
+    background-color : blue;
+    overflow: hidden;
+    line-height: 0;
+    width:7vh;
+    height: 7vh;
+  }
 }
 
 @media all and (orientation: landscape){
@@ -146,6 +156,16 @@
     border-width: thin;
     border-style : solid;
     background-color : red;
+    overflow: hidden;
+    line-height: 0;
+    width:7vh;
+    height: 7vh;
+  }
+  
+  #tableEchec .casePion {
+    border-width: thin;
+    border-style : solid;
+    background-color : blue;
     overflow: hidden;
     line-height: 0;
     width:7vh;
