@@ -82,13 +82,16 @@ class Pion {
       this.position.set(x,y);
       td = this.getCase();
       td.appendChild(child);
+      console.log("pion déplacé en " + x + ' ' + y);
+      let img = this.getImg();
+      img.id = '_img' + x + y;
     }
   }
   
   //Efface le pion de sa position, retire son image du plateau
   delete(){
     let td = this.getCase();
-    console.log("suppresion de " + td.id);
+    console.log("suppresion de l'image sur " + td.id);
     let img = td.lastChild;
     if(img != undefined) td.removeChild(img);
   }
@@ -105,10 +108,9 @@ class Pion {
         td = document.getElementById('Case' + x + y);
         
         if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
-          setCaseSelectionnable(td,this);
-        }
-        
-        else { //actions sur la case du pion (fonctionne pas -_-)
+          if(this.position.x - x == this.position.y - y){
+             setCaseSelectionnable(td,this);
+          }
         }
       }
     }
@@ -268,9 +270,9 @@ function eventTableEchec(event){
         source = undefined;
         resetAllCases();
       }
-      else if(event.target.id == '_img' + x + y){
+      else if(event.target.id == '_img' + x + y && document.getElementById('Case' + x + y).className == 'selectCollision'){
+        console.log("pion a manger " + event.target.id);
         let j = getPion(x,y);
-        let pion_a_retirer;
         if(j != undefined) {
           pions[j].delete();
           pions[j] = undefined;
@@ -283,3 +285,6 @@ function eventTableEchec(event){
   }
 }
 
+function abs(valeur){
+  return (valeur > 0)
+}
