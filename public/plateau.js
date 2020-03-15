@@ -59,23 +59,6 @@ class Pion {
     piece.width = squareSize;
     piece.height = squareSize;
     //piece.style.margin = '' + tailleCase/4 + 'px ' + tailleCase/4 + 'px';
-    this.setSelectable();
-  }
-  
-  //activer l'évènement permettant à l'utilisateur de le choisir pour le déplacer
-  setSelectable(){
-    this.deplace = true;
-    let me = this; //se copier pour les fonctions ou le this n'est plus possible
-    let img = this.getImg();
-    if(img != undefined) img.addEventListener('click', function(e){
-      me.setNonSelectable();
-      me.selectNewCase();
-    });
-  }
-  
-  //retire l'évènement permettant de le déplacer
-  setNonSelectable(){
-    this.deplace = false;
   }
   
   //return la case <td> associé au pion
@@ -126,21 +109,9 @@ class Pion {
         }
         
         else { //actions sur la case du pion (fonctionne pas -_-)
-          console.log("annule deplacement");
-          let img = this.getImg();
-          img.onmouseclick = function(e){
-            
-            resetAllCases();
-            this.setSelectable();
-          }
         }
       }
     }
-  }
-  
-  dead(){
-    let td = this.getCase();
-    td.remove(td.lastChild);
   }
 }
 
@@ -235,24 +206,6 @@ function setCaseSelectionnable(td,pion){
   var newClass = (td.firstChild == undefined)? 'selectCase' : 'selectCollision';
   
   td.className = newClass; //ajoute un contour pour indiquer que la case peut être choisit
-  
-  td.onclick = function(e){ //si l'on sélectionne la case
-    console.log("move to " + e.target.id);
-    let td2;
-    //la modification de couleurs et d'évènements est retirés des cases et le déplacement du pion est éffectué
-    resetAllCases();
-    
-    //identifiant : "Casexy", récupération de x et y
-    let a = parseInt(e.target.id.charAt(4)); //récupère la coordonnée x
-    let b = parseInt(e.target.id.charAt(5)); //récupère la coordonnée y
-    let pionExist;
-    if((pionExist = getPion(a,b)) != undefined){
-      pionExist.dead();
-    }
-    
-    //déplacement du pion
-    pion.move(a,b);
-  }
 }
 
 //supprime les évènements et rends les couleurs d'origine à toutes les cases du plateau
