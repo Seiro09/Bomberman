@@ -232,3 +232,7 @@ function resetCase(td) {
     td.className = 'blackCase';
   }
 }
+
+function eventTableEchec(event){
+  
+}
