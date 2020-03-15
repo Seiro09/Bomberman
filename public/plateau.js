@@ -198,7 +198,9 @@ function resize(){
 })();
 
 /*
-* 
+* la case devient verte s'il n'y a pas de pion déjà présent
+* la case devient rouge si un pion ennemi est présent sur la case
+* la case reste inchangé si un pion ami est présent sur la case
 */
 function setCaseSelectionnable(td,pion){
   //couleur de discernement de la case pour être choisit pour le déplacement (rouge si un pion se trouve déjà sur la case)
@@ -240,6 +242,7 @@ function resetCase(td) {
   }
 }
 
+//variable pour l'evenement
 var pion_a_deplacer = undefined;
 var source = undefined;
 var destination = undefined;
@@ -263,23 +266,34 @@ function eventTableEchec(event){
     else { //la case n'est pas la position source
       if(event.target.className == 'selectCase'){ //la case est accessible par le pion
         pion_a_deplacer.move(x,y);
-        source = undefined;
         resetAllCases();
+        destination = new Position2D(x,y);
+        /*
+        transmission au serveur des positions de déplacement
+        code non implémentée
+        */
+        source = undefined;
       }
       else if(event.target.id == '_img' + x + y && document.getElementById('Case' + x + y).className == 'selectCollision'){ //la case contient un autre pion
         let j = getPion(x,y);
         if(j != undefined) {
-          pions[j].delete();
-          pions[j] = undefined;
+          pions[j].delete(); //le pion est retirée de l'affichage
+          pions[j] = undefined; //le pion devient indéfini dans le tableau (si vous savez comment le retirer du tableau pions[] n'hésitez pas a modifier cette ligne)
         }
-        pion_a_deplacer.move(x,y);
-        source = undefined;
         resetAllCases();
+        pion_a_deplacer.move(x,y);
+        destination = new Position2D(x,y);
+        /*
+        transmission au serveur des positions de déplacement
+        code non implémentée
+        */
+        source = undefined;
       }
     }
   }
 }
 
+//retourne la valeur absolue de "valeur"
 function abs(valeur){
   return (valeur > 0)? valeur : -valeur;
 }
