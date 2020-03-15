@@ -121,8 +121,10 @@ var pions = [new Pion('white',0,0), new Pion('black',1,0)];
 //supprime la photo du pion et la rajoute sur le plateau, pour refresh l'affichage
 function refreshPions(){
   for(let i = 0; i < pions.length; i++) {
-    pions[i].delete();
-    pions[i].affiche();
+    if(pions[i] != undefined){
+      pions[i].delete();
+      pions[i].affiche();
+    }
   }
 }
 
@@ -255,7 +257,6 @@ function eventTableEchec(event){
   else {
     console.log("source déjà défini");
     if(x == source.x && y == source.y){
-      pion_a_deplacer = undefined;
       source = undefined;
       resetAllCases();
       console.log("suppression de la source");
@@ -264,12 +265,19 @@ function eventTableEchec(event){
       console.log("definition de la destination")
       if(event.target.className == 'selectCase'){
         pion_a_deplacer.move(x,y);
-        pion_a_deplacer = undefined;
         source = undefined;
         resetAllCases();
       }
-      else if(event.target.className == 'selectCollision'){
-        
+      else if(event.target.id == '_img' + x + y){
+        let j = getPion(x,y);
+        let pion_a_retirer;
+        if(j != undefined) {
+          pions[j]
+          pions[j] = undefined;
+        }
+        //pion_a_deplacer.move(x,y);
+        source = undefined;
+        resetAllCases();
       }
     }
   }
