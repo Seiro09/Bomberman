@@ -98,7 +98,7 @@
     height: 7vw;
   }
   
-  #tableEchec .casePion {
+  #tableEchec .selectPion {
     border-width: thin;
     border-style : solid;
     background-color : blue;
@@ -162,7 +162,7 @@
     height: 7vh;
   }
   
-  #tableEchec .casePion {
+  #tableEchec .selectPion {
     border-width: thin;
     border-style : solid;
     background-color : blue;
