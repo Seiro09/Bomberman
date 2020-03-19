@@ -115,8 +115,48 @@ class Pion {
   }
 }
 
+class pionBasique extends Pion {
+  constructor(color,x,y){
+    super(color,x,y);
+    this.firstMove = true;
+  }
+  
+  selectNewCase(){
+    let td;
+    
+    td = document.getElementById('Case' + this.position.x + (this.position.y - 1));
+    setCaseSelectionnable(td,this);
+    if(this.firstMove == true){
+      td = document.getElementById('Case' + this.position.x + (this.position.y - 2));
+      setCaseSelectionnable(td,this);
+    }
+    
+    if(getPion(this.position.x - 1, this.position.y + 1) != undefined){
+      td = document.getElementById('Case' + (this.position.x - 1) + (this.position.y + 1));
+      setCaseSelectionnable(td,this);
+    }
+    if(getPion(this.position.x + 1, this.position.y - 1) != undefined){
+      td = document.getElementById('Case' + (this.position.x + 1) + (this.position.y - 1));
+      setCaseSelectionnable(td,this);
+    }
+    if(getPion(this.position.x - 1, this.position.y - 1) != undefined){
+      td = document.getElementById('Case' + (this.position.x - 1) + (this.position.y - 1));
+      setCaseSelectionnable(td,this);
+    }
+    if(getPion(this.position.x + 1, this.position.y + 1) != undefined){
+      td = document.getElementById('Case' + (this.position.x + 1) + (this.position.y + 1));
+      setCaseSelectionnable(td,this);
+    }
+  }
+  
+  move(x,y){
+    super.move(x,y);
+    this.firstMove = false;
+  }
+}
+
 //tableau de pions
-var pions = [new Pion('white',2,0), new Pion('black',4,0)];
+var pions = [new Pion('white',2,0), new pionBasique('black',4,7)];
 
 //supprime la photo du pion et la rajoute sur le plateau, pour refresh l'affichage
 function refreshPions(){
