@@ -115,7 +115,7 @@ class Pion {
   }
 }
 
-class pionBasique extends Pion {
+/*class pionBasique extends Pion {
   constructor(color,x,y){
     super(color,x,y);
     this.firstMove = true;
@@ -157,10 +157,10 @@ class pionBasique extends Pion {
     super.move(x,y);
     this.firstMove = false;
   }
-}
+}*/
 
 //tableau de pions
-var pions = [new Pion('white',2,0), new pionBasique('black',4,7)];
+var pions = [new Pion('white',2,0), new Pion('black',4,7)];
 
 //supprime la photo du pion et la rajoute sur le plateau, pour refresh l'affichage
 function refreshPions(){
