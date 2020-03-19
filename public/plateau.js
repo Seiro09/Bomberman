@@ -122,11 +122,13 @@ class pionBasique extends Pion {
   }
   
   selectNewCase(){
+    
+    
     let td;
     
     td = document.getElementById('Case' + this.position.x + (this.position.y - 1));
-    setCaseSelectionnable(td,this);
-    if(this.firstMove == true){
+    if(getPion(this.position.x, this.position.y - 1) == undefined) setCaseSelectionnable(td,this);
+    if(this.firstMove == true && getPion(this.position.x, this.position.y - 1) == undefined){
       td = document.getElementById('Case' + this.position.x + (this.position.y - 2));
       setCaseSelectionnable(td,this);
     }
