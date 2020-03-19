@@ -115,8 +115,52 @@ class Pion {
   }
 }
 
+/*class pionBasique extends Pion {
+  constructor(color,x,y){
+    super(color,x,y);
+    this.firstMove = true;
+  }
+  
+  selectNewCase(){
+    
+    
+    let td;
+    
+    td = document.getElementById('Case' + this.position.x + (this.position.y - 1));
+    if(getPion(this.position.x, this.position.y - 1) == undefined) //case devant lui
+      setCaseSelectionnable(td,this);
+    
+    if(this.firstMove == true && getPion(this.position.x, this.position.y - 1) == undefined){ //deuxieme case devant lui
+      td = document.getElementById('Case' + this.position.x + (this.position.y - 2));
+      setCaseSelectionnable(td,this);
+    }
+    
+    if(getPion(this.position.x - 1, this.position.y + 1) != undefined){ // pion en bas a gauche
+      td = document.getElementById('Case' + (this.position.x - 1) + (this.position.y + 1));
+      setCaseSelectionnable(td,this);
+    }
+    if(getPion(this.position.x + 1, this.position.y - 1) != undefined){ //pion en haut a droite
+      td = document.getElementById('Case' + (this.position.x + 1) + (this.position.y - 1));
+      setCaseSelectionnable(td,this);
+    }
+    if(getPion(this.position.x - 1, this.position.y - 1) != undefined){ //pion en haut a gauche
+      td = document.getElementById('Case' + (this.position.x - 1) + (this.position.y - 1));
+      setCaseSelectionnable(td,this);
+    }
+    if(getPion(this.position.x + 1, this.position.y + 1) != undefined){ //pion en bas a droite
+      td = document.getElementById('Case' + (this.position.x + 1) + (this.position.y + 1));
+      setCaseSelectionnable(td,this);
+    }
+  }
+  
+  move(x,y){
+    super.move(x,y);
+    this.firstMove = false;
+  }
+}*/
+
 //tableau de pions
-var pions = [new Pion('white',2,0), new Pion('black',4,0)];
+var pions = [new Pion('white',2,0), new Pion('black',4,7)];
 
 //supprime la photo du pion et la rajoute sur le plateau, pour refresh l'affichage
 function refreshPions(){
@@ -255,6 +299,7 @@ function eventTableEchec(event){
     if(i != undefined) pion_a_deplacer = pions[i];
     if(pion_a_deplacer != undefined){
       source = new Position2D(x,y);
+      document.getElementById('Case' + source.x + source.y).className = 'selectPion';
       pion_a_deplacer.selectNewCase();
     }
   }
