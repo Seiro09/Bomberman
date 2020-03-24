@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>Chess</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/create/create.css">
+  </head>  
+  <body id = "body">
+    <section id = "accueil">
+      <form id = "banniereTable">
+        <p id = "row0">
+          
+        </p>
+        <p id = "row1">
+          Code du salon actuel : <input type = "text" id = "afficheCode" value = "" readonly/>
+        </p>
+        <p id = "row2">
+          <button type = "submit" id = "aleatoire">Générer un code de salon aléatoire</button> Ou 
+          <input type = "text" id = "codeSalon" value = "" placeholder = "Entrez un code personnalisé"/>
+          <button type = "submit" id = "valider">Valider</button>
+        </p>
+        <p id = "row3">
+          <button type = "submit" id = "retourAccueil">Retour à la page d'accueil</button> <button type = "submit" id = "launch">Ouvrir le salon</button>
+        </p>
+      </form>
+    </section>
+    <script type = "text/javascript" src = "/socket.io/socket.io.js"></script>
+    <script type = "text/javascript" src = "/create/create.js"></script>
+  </body>
+</html>

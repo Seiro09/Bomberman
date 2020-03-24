@@ -1,0 +1,33 @@
+#body {
+  background-image: url('https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784');
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-size : 30px;
+  padding-top : 10%;
+}
+
+button, input {
+  font-size : 25px;
+  height : 45px;
+  border-style : solid;
+  background-color : white;
+  border-radius: 10px;
+}
+
+#banniereTable {
+  border-style : outset;
+  border-radius: 30px;
+  margin : auto;
+  width : 60%;
+  overflow : auto;
+  background-color : grey;
+}
+
+p {
+  text-align : center;
+  font-family : Gill Sans, sans-serif;
+}
+
+#codeSalon {
+  width : 320px;
+}
