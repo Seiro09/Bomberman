@@ -3,49 +3,54 @@ var height;
 var squareSize;
 window.addEventListener("resize", resize);
 var nombreCases = 8;
-var colorPlayer;
-var jouer;
+var colorPlayer; //indique si le joueur joue les pions blancs ou noirs
+var jouer; //indique si le joueur peut jouer
 
 //tableau de pions
 var pions = undefined;
 
 var socket = io.connect();
 
+//récupérer le code du salon avec l'url
 function getCodeSalon(){
   let url = document.location.href;
   let split = url.split('salon/');
   return split[1];
 }
 
+//demande la couleur qui lui sera attribué pour jouer
 socket.emit('askColor', getCodeSalon());
 
+//reçoit une reponse du serveur pour la couleur
 socket.on('giveColor', function(message){
   colorPlayer = message;
-  if(message == 'error'){
+  if(message == 'error'){ //le serveur envoie error car 2 joueurs sont déjà présents
     let plateau = document.getElementById('plateau');
     let p = document.createElement('p');
     plateau.appendChild(p);
     p.innerHTML = 'Ce salon est complet. Cliquez <a href = "/">ici</a> pour revenir sur la page d\'accueil.';
   }
   else {
-    plateauEchec();
-    initPions();
-    refreshPions();
+    plateauEchec(); //dessine le plateau
+    initPions();    //intialise les pions selon la couleur du joueur
+    refreshPions(); //affiche les pions sur le plateau
     jouer = false;
-    if(colorPlayer == 'white') document.getElementById('attenteJoueur').innerHTML = 'En attente du joueur adverse';
+    if(colorPlayer == 'white') document.getElementById('attenteJoueur').innerHTML = 'En attente du joueur adverse'; //on attends le joueur noir pour commencer
     else {
-      console.log('send ready');
+      //le joueur noir préviens le serveur que le blanc peut commencer à jouer
       socket.emit('ready', getCodeSalon());
     }
   }
 });
 
+//seul le joueur blanc reçoit ce message, lui permettant de commencer à jouer car le joueur noir est prêt
 socket.on('ready', function(message){
   console.log('receive ready');
   jouer = true;
   document.getElementById('attenteJoueur').innerHTML = '';
 });
 
+//le serveur émet stop car un joueur est parti donc le salon est fermé
 socket.on('stop', function(message){
   let plateau = document.getElementById('plateau');
     let p = document.createElement('p');
@@ -163,7 +168,7 @@ class Pion {
   }
 }
 
-
+//classe pour le pion Pawn
 class Pawn extends Pion {
   constructor(color,x,y){
     super(color,x,y);
@@ -211,6 +216,8 @@ class Pawn extends Pion {
   }
 }
 
+
+//classe pour le pion Bishop
 class Bishop extends Pion {
   
   //construit le pion
@@ -237,6 +244,8 @@ class Bishop extends Pion {
   }
 }
 
+
+//classe pour le pion Knight
 class Knight extends Pion{
   
   //construit le pion
@@ -269,6 +278,8 @@ class Knight extends Pion{
     }
   }
 }
+
+//classe pour le pion Queen
 
 class Queen extends Pion {
   
@@ -335,7 +346,7 @@ class Queen extends Pion {
   }
 }
 
-
+//classe pour le pion King
 class King extends Pion {
   
   //construit le pion
@@ -368,6 +379,8 @@ class King extends Pion {
   }
 }
 
+
+//initialise les pions selon la couleur du joueur, les pions qui lui sont attribués seront en bas du plateau
 function initPions(){
   if(colorPlayer == 'white') {
     pions = [new Pawn('black',0,1),new Pawn('black',1,1),new Pawn('black',2,1),new Pawn('black',3,1),
@@ -423,7 +436,7 @@ function initVal(){
 
 
 /**
-* crée les attributs du tableau pour faire l eplateau de jeu
+* crée les attributs du tableau pour faire le plateau de jeu
 * chaque case aura un identifiant associé à ses coordonnées qui prends la forme "Casexy" x et y les valeurs de la position
 * une classe whiteCase ou blackCase sera affectée à la case selon qu'elle soit blanche ou noir
 */
@@ -473,20 +486,20 @@ function setCaseSelectionnable(td,pion){
   //couleur de discernement de la case pour être choisit pour le déplacement (rouge si un pion se trouve déjà sur la case)
   var newClass = (td.firstChild == undefined)? 'selectCase' : 'selectCollision';
   
-  if(newClass == 'selectCollision'){
+  if(newClass == 'selectCollision'){ //un pion est présent sur la case
     let i = getPion(parseInt(td.id.charAt(4)),parseInt(td.id.charAt(5)));
     if(i != undefined) {
-      if(pions[i].color != pion.color){
+      if(pions[i].color != pion.color){ //c'est un pion adverse donc on peut mettre la case en rouge sinon la case reste inchangée
         td.className = newClass;
       }
     }
   }
-  else {
+  else { //s'il n'y a pas de pions
     td.className = newClass;
   }
 }
 
-//supprime les évènements et rends les couleurs d'origine à toutes les cases du plateau
+//rends les couleurs d'origine à toutes les cases du plateau
 function resetAllCases(){
   for(let y = 0; y < nombreCases; y++){
     for(let x = 0; x < nombreCases; x++){
@@ -510,19 +523,20 @@ function resetCase(td) {
 }
 
 //variable pour l'evenement
-var indice;
-var source = undefined;
-var destination = undefined;
+var indice; //indice dans le plateau du pion à déplacer
+var source = undefined; //position de départ du pion, indique si un pion est sélectionnée pour le déplacer
+var destination = undefined; //position d'arrivée du pion
 
+//ecoute le tableau, si une case est cliquée différents états du plateau modifient les variables pour l'évènement 
 function eventTableEchec(event){
   let x = parseInt(event.target.id.charAt(4));
   let y = parseInt(event.target.id.charAt(5));
-  if(source == undefined){ //définit la position de départ (si un pion est présent)
+  if(source == undefined){ //si l'on clique sur le pion , il devient sélectionné si le joueur a le droit de le déplacer
     let i = getPion(x,y);
-    if(i != undefined && jouer) {
+    if(i != undefined && jouer) { //s'il peut jouer le pion la source est défini sur sa position
       if(pions[i].color == colorPlayer) {
         source = new Position2D(x,y);
-        document.getElementById('Case' + source.x + source.y).className = 'selectPion';
+        document.getElementById('Case' + source.x + source.y).className = 'selectPion'; //la case devient bleu pour voir le pion sélectionné
         pions[i].selectNewCase();
         indice = i;
       }
@@ -538,14 +552,8 @@ function eventTableEchec(event){
         pions[indice].move(x,y);
         resetAllCases();
         destination = new Position2D(x,y);
-        /*
-        transmission au serveur des positions de déplacement
-        code non implémentée
-        */
-        
         jouer = false;
-        socket.emit('deplacement', source.x + ',' + source.y + ',' + destination.x + ',' + destination.y);
-        
+        socket.emit('deplacement', source.x + ',' + source.y + ',' + destination.x + ',' + destination.y); //transfert des positions relatives au déplacement du pion au serveur
         source = undefined;
       }
       else if(event.target.id == '_img' + x + y && document.getElementById('Case' + x + y).className == 'selectCollision'){ //la case contient un autre pion
@@ -557,38 +565,32 @@ function eventTableEchec(event){
         resetAllCases();
         pions[indice].move(x,y);
         destination = new Position2D(x,y);
-        /*
-        transmission au serveur des positions de déplacement
-        code non implémentée
-        */
-        
         jouer = false;
-        socket.emit('deplacement', source.x + ',' + source.y + ',' + destination.x + ',' + destination.y);
-        
+        socket.emit('deplacement', source.x + ',' + source.y + ',' + destination.x + ',' + destination.y); //transfert des positions relatives au déplacement du pion au serveur
         source = undefined;
       }
     }
   }
 }
 
+//on reçoit le déplacement distant
 socket.on('deplacement', function(message){
   console.log('deplacement distant obtenu : '+ message);
+  
   let position = message.split(',');
   source = new Position2D(parseInt(position[0]), parseInt(position[1]));
   destination = new Position2D(parseInt(position[2]), parseInt(position[3]));
   let i = getPion(source.x,source.y);
   let j = getPion(destination.x,destination.y);
-  console.log(i + ' ' + j);
-  if(j != undefined){
-    console.log(pions[j].color + ' ' + colorPlayer);
+  
+  if(j != undefined){ //l'adversaire mange un pion
     if(pions[j].color == colorPlayer){
-      console.log('pion a supprimer en ' + pions[j].position.log());
       pions[j].delete();
       pions[j] = undefined;
     }
     pions[i].move(destination.x, destination.y);
   }
-  else {
+  else { //déplacement sur une case vide
     pions[i].move(destination.x, destination.y);
   }
   jouer = true;

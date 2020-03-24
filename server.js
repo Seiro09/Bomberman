@@ -1,11 +1,10 @@
-// server.js
-// where your node app starts
-
+//objet piece pour stocker le plateau côté serveur afin de vérifier les données qui sont reçu par les clients 
 function Piece(type, color){
   this.type = type;
   this.color = color;
 }
 
+//variable contenant le plateau sans déplacement, sert à être copié pour générer des plateaux en début de partie
 var plateau = [
   [new Piece('Rook', 'black'), new Piece('Knight', 'black'), new Piece('Bishop', 'black'), new Piece('Queen', 'black'), new Piece('King', 'black'), new Piece('Bishop', 'black'), new Piece('Knight', 'black'), new Piece('Rook', 'black')],
   [new Piece('Pawn', 'black'), new Piece('Pawn', 'black'), new Piece('Pawn', 'black'), new Piece('Pawn', 'black'), new Piece('Pawn', 'black'), new Piece('Pawn', 'black'), new Piece('Pawn', 'black'), new Piece('Pawn', 'black')],
@@ -17,6 +16,8 @@ var plateau = [
   [new Piece('Rook', 'white'), new Piece('Knight', 'white'), new Piece('Bishop', 'white'), new Piece('Queen', 'white'), new Piece('King', 'white'), new Piece('Bishop', 'white'), new Piece('Knight', 'white'), new Piece('Rook', 'white')]
 ];
 
+
+//clone le plateau ci-dessus et retourne la copie
 function clonePlateau(){
   var clone = [[,,,,,,,],[,,,,,,,],[,,,,,,,],[,,,,,,,],[,,,,,,,],[,,,,,,,],[,,,,,,,],[,,,,,,,]];
   for(let i = 0; i < 8; i++){
@@ -27,6 +28,7 @@ function clonePlateau(){
   return clone;
 }
 
+//objet contenant les infos d'un salon
 class Salon {
   constructor(codeSalon){
     this.whitePlayer = undefined;
@@ -37,10 +39,10 @@ class Salon {
   }
 }
 
-var idClients = [];
-
+//tableau contenant l'ensemble des salons existant
 var salons = [];
 
+//récupérer un salon dans le tableau avec son code
 function getSalonByCode(code){
   for(let i = 0; i < salons.length; i++){
     if(salons[i].codeSalon == code){
@@ -50,6 +52,7 @@ function getSalonByCode(code){
   return undefined;
 }
 
+//récupérer le salon (via l'indice pour le tableau) à partir de l'identifiant d'un client
 function getSalonByPlayer(id){
   for(let i = 0; i < salons.length; i++){
     if(salons[i].whitePlayer != undefined) {
@@ -66,8 +69,7 @@ function getSalonByPlayer(id){
   return undefined;
 }
 
-// we've started you off with Express (https://expressjs.com/)
-// but feel free to use whatever libraries or frameworks you'd like through `package.json`.
+//appel aux modules express http et socket.io
 const express = require("express");
 const app = express();
 const http = require('http');
@@ -76,33 +78,38 @@ const server = http.createServer(app);
 
 var io = require('socket.io').listen(server);
 
+
+//lorsqu'un client se connecte
 io.sockets.on('connection', function(socket){
-  idClients.push(socket.id + '');
-  console.log(socket.id);
+  
+  //le client envoi le code du salon dans create.html/js
   socket.on('code', function(message){
+    //si le salon n'existe pas on peut le créer et indiquer au client de lancer le salon en emettant 'launched', il sera donc redirigé vers le salon
     if(getSalonByCode(message) == undefined) {
       salons.push(new Salon(message));
       socket.emit('launched', '');
     }
   });
   
+  //le client est arrivé dans le salon et demande la couleur qui lui sera attribué en indiquant son code de salon au serveur
   socket.on('askColor', function(message){
     let salon = getSalonByCode(message);
-    if(salon != undefined) {
-      if(salon.whitePlayer == undefined){
+    if(salon != undefined) { //on vérifie que le salon existe bien
+      if(salon.whitePlayer == undefined){ //le joueur blanc n'est pas défini donc le client recevra la couleur white
         salon.whitePlayer = socket;
         socket.emit('giveColor', 'white');
       }
-      else if(salon.blackPlayer == undefined){
+      else if(salon.blackPlayer == undefined){ //le joueur noir n'est pas défini donc le client recevra la couleur black
         salon.blackPlayer = socket;
         socket.emit('giveColor', 'black');
       } 
-      else {
+      else { //les 2 couleurs white/black ont déjà été attribués donc le salon est plein, on envoi 'error' au lieu d'une couleur
         socket.emit('giveColor', 'error');
       }
     }
   });
   
+  //le joueur noir envoi ready au serveur qui transmet à son tour au joueur blanc le message afin qu'il puisse commencer à jouer
   socket.on('ready', function(message){
     console.log('receive ready');
     let salon = getSalonByCode(message);
@@ -112,33 +119,33 @@ io.sockets.on('connection', function(socket){
     }
   });
   
+  //le client a envoyé son déplacement (position de départ du pion et case vers laquelle il se déplace)
   socket.on('deplacement', function(message){
     let i = getSalonByPlayer(socket.id);
     if(i != undefined) {
-      update(salons[i], message, socket.id);
+      update(salons[i], message, socket.id); //on modifie les coordonnées car le plateau est inversée pour le joueur noir puis on envoi à l'autre joueur
     }
   });
   
+  
+  //un client est parti
   socket.on('disconnect', function(message){
-    for(let i = 0; i < idClients.length; i++){
-      if(socket.id == idClients[i]) idClients.splice(i);
-    }
-    
     let i = getSalonByPlayer(socket.id);
-    if(i != undefined) {
-      if(salons[i].whitePlayer.id == socket.id){
+    if(i != undefined) { //le client a t-il quitté un salon ?
+      if(salons[i].whitePlayer.id == socket.id){ //oui car il était joueur blanc, on indique au joueur noir de quitter s'il est toujours dans le salon
         if(salons[i].blackPlayer != undefined) salons[i].blackPlayer.emit('stop','');
       }
-      else if(salons[i].blackPlayer != undefined){
-        if(salons[i].blackPlayer.id == socket.id){
+      else if(salons[i].blackPlayer != undefined){ //le joueur noir est-il présent dans le salon ?
+        if(salons[i].blackPlayer.id == socket.id){ //oui car il était joueur blanc, on indique au joueur noir de quitter
           if(salons[i].whitePlayer != undefined) salons[i].whitePlayer.emit('stop','');
         }
       }
-      salons.splice(i);
+      salons.splice(i); //suppression du salon
     }
   });
 });
 
+//modifie les positions envoyés par le clients (inverse) pour les envoyer à l'autre joueur
 function update(salon,message, id){
   let position = message.split(',');
   for(let i = 0; i < 4; i++){
@@ -153,30 +160,32 @@ function update(salon,message, id){
   }
 }
 
-// make all the files in 'public' available
-// https://expressjs.com/en/starter/static-files.html
+//rendre les fichiers dans 'public' accessible
 app.use(express.static("public"));
 
-// https://expressjs.com/en/starter/basic-routing.html
+// route par défaut
 app.get("/", (request, response) => {
   response.sendFile(__dirname + "/views/index.html");
 });
+//création d'un salon
 app.get("/create", (request, response) => {
   response.sendFile(__dirname + "/public/create/create.html");
 });
+//le client rejoint un salon (peut être rejoint juste en tapant l'url)
 app.get("/salon/:codeSalon", (request, response) => {
-  if(getSalonByCode(request.params.codeSalon) != undefined)
+  if(getSalonByCode(request.params.codeSalon) != undefined) //si le salon existe, il est renvoyé vers la page de jeu
     response.sendFile(__dirname + "/public/chess/chess.html");
-  else {
+  else { //sinon on lui indique que le salon n'existe pas
     response.setHeader('Content-Type', 'text/plain');
     response.status(404).send("Ce salon n'existe pas : " + request.params.codeSalon);
   }
 });
-app.use(function(request, response, next){
+app.use(function(request, response, next){ //l'url indiqué n'est pas reconnu parmis les routes ci-dessus
     response.setHeader('Content-Type', 'text/plain');
     response.status(404).send('Page introuvable');
 });
 
+//le server est lancé sur le port 8080
 var listener = server.listen(8080, () => {
   console.log(8080); 
 });
