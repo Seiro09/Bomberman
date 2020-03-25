@@ -78,7 +78,25 @@ function afficheCode(){
 
 //supprime les espaces dans le code et les remplacent par des '_'
 function formateForCode(code){
+  code = formateCodeSpace(code);
+  return formateCodeInterrogation(code);
+}
+
+function formateCodeSpace(code){
   let split = code.split(' ');
+  code = '';
+  let i;
+  for(i = 0; i < split.length - 1; i++){
+    code += split[i] + '_';
+    console.log(code);
+  }
+  code += split[i];
+  console.log(code);
+  return code;
+}
+
+function formateCodeInterrogation(code){
+  let split = code.split('?');
   code = '';
   let i;
   for(i = 0; i < split.length - 1; i++){
