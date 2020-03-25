@@ -94,17 +94,21 @@ io.sockets.on('connection', function(socket){
   //le client est arrivé dans le salon et demande la couleur qui lui sera attribué en indiquant son code de salon au serveur
   socket.on('askColor', function(message){
     let salon = getSalonByCode(message);
+    console.log('demande couleur vers ' + message);
     if(salon != undefined) { //on vérifie que le salon existe bien
       if(salon.whitePlayer == undefined){ //le joueur blanc n'est pas défini donc le client recevra la couleur white
         salon.whitePlayer = socket;
         socket.emit('giveColor', 'white');
+        console.log('white');
       }
       else if(salon.blackPlayer == undefined){ //le joueur noir n'est pas défini donc le client recevra la couleur black
         salon.blackPlayer = socket;
         socket.emit('giveColor', 'black');
+        console.log('black');
       } 
       else { //les 2 couleurs white/black ont déjà été attribués donc le salon est plein, on envoi 'error' au lieu d'une couleur
         socket.emit('giveColor', 'error');
+        console.log('error');
       }
     }
   });
@@ -140,6 +144,7 @@ io.sockets.on('connection', function(socket){
           if(salons[i].whitePlayer != undefined) salons[i].whitePlayer.emit('stop','');
         }
       }
+      console.log('suppression du salon ' + salons[i].codeSalon);
       salons.splice(i); //suppression du salon
     }
   });
@@ -179,6 +184,10 @@ app.get("/salon/:codeSalon", (request, response) => {
     response.setHeader('Content-Type', 'text/plain');
     response.status(404).send("Ce salon n'existe pas : " + request.params.codeSalon);
   }
+});
+//faire des tests
+app.get("/test", (request, response) => {
+  response.sendFile(__dirname + "/public/tests/tests.html");
 });
 app.use(function(request, response, next){ //l'url indiqué n'est pas reconnu parmis les routes ci-dessus
     response.setHeader('Content-Type', 'text/plain');
