@@ -11,7 +11,6 @@ var socket = io.connect(); //io existe dans create.html, erreur normale si elle 
 function addEvent(){
   
   let input = document.getElementById('codeSalon');
-  let valider = document.getElementById('valider');
   let aleatoire = document.getElementById('aleatoire');
   let retour = document.getElementById('retourAccueil');
   let launch = document.getElementById('launch');
@@ -20,11 +19,11 @@ function addEvent(){
   //le formulaire est validé
   form.addEventListener('submit', function(e){
     
-    //l'utilisateur a validé son code de salon personnalisé
-    if(choix == 'valider'){
-      if(input.value != '') { // si le code n'est pas vide
-        input.value = formateForCode(input.value); //on supprime les espaces
-        codeSalon = input.value;
+    //l'utilisateur a choisit de choisir un code de salon personnalisé
+    if(choix == 'codeSalon'){
+      let code = prompt("Entrez un code de salon personnalisé");
+      if(code != null){
+        codeSalon = formateForCode(code);
         afficheCode();
       }
     }
@@ -54,7 +53,7 @@ function addEvent(){
     e.preventDefault(); //ne pas quitter la page
   });
   
-  valider.onclick = changeChoix;
+  input.onclick = changeChoix;
   aleatoire.onclick = changeChoix;
   launch.onclick = changeChoix;
   retour.onclick = changeChoix;

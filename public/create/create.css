@@ -8,7 +8,6 @@
 
 button, input {
   font-size : 25px;
-  height : 45px;
   border-style : solid;
   background-color : white;
   border-radius: 10px;
@@ -26,8 +25,4 @@ button, input {
 p {
   text-align : center;
   font-family : Gill Sans, sans-serif;
-}
-
-#codeSalon {
-  width : 320px;
 }

@@ -9,6 +9,11 @@ var jouer; //indique si le joueur peut jouer
 //tableau de pions
 var pions = undefined;
 
+var KingJoueur;
+
+//echec au roi pour le joueur courant
+var echec = false;
+
 var socket = io.connect();
 
 //récupérer le code du salon avec l'url
@@ -37,7 +42,7 @@ socket.on('giveColor', function(message){
     initPions();    //intialise les pions selon la couleur du joueur
     refreshPions(); //affiche les pions sur le plateau
     jouer = false;
-    if(colorPlayer == 'white') document.getElementById('attenteJoueur').innerHTML = 'En attente du joueur adverse'; //on attends le joueur noir pour commencer
+    if(colorPlayer == 'white') document.getElementById('indication').innerHTML = 'En attente du joueur adverse'; //on attends le joueur noir pour commencer
     else {
       //le joueur noir préviens le serveur que le blanc peut commencer à jouer
       socket.emit('ready', getCodeSalon());
@@ -50,7 +55,7 @@ socket.on('giveColor', function(message){
 socket.on('ready', function(message){
   console.log('receive ready');
   jouer = true;
-  document.getElementById('attenteJoueur').innerHTML = '';
+  document.getElementById('indication').innerHTML = 'A vous de jouer';
 });
 
 //le serveur émet stop car un joueur est parti donc le salon est fermé
@@ -58,8 +63,14 @@ socket.on('stop', function(message){
   console.log('stop');
   let plateau = document.getElementById('plateau');
     let p = document.createElement('p');
+    plateau.innerHTML = '';
     plateau.appendChild(p);
     p.innerHTML = 'Votre adversaire a quitté, le salon a donc été fermé. Cliquez <a href = "/">ici</a> pour revenir sur la page d\'accueil.';
+});
+
+socket.on('fin', function(message){
+  alert('Vous avez gagné !')
+  document.getElementById('indication').innerHTML = '<a href = "/">Retourner à l\'accueil</a>';
 });
 
 /**
@@ -89,6 +100,11 @@ class Position2D {
     this.x = x;
     this.y = y;
   }
+  
+  setP(position){
+    this.x = position.x;
+    this.y = position.y;
+  }
 }
 
 /**
@@ -102,6 +118,8 @@ class Pion {
     this.src = "https://cdn.glitch.com/cc360787-9153-4d34-a2e2-ddbd9bc2b9e4%2FBlackPawn.png?v=1583876671281";
     this.color = color;
     this.type = 'pion';
+    this.fakePosition = new Position2D(x,y);
+    this.placementsPossibles = [];
   }
   
   /*
@@ -141,7 +159,163 @@ class Pion {
       console.log("pion déplacé en " + x + ' ' + y);
       let img = this.getImg();
       img.id = '_img' + x + y;
+      this.fakePosition.setP(this.position);
+      this.placementsPossibles = [];
     }
+  }
+  
+  isEdible(){
+    let td;
+    var verif;
+    let x = this.fakePosition.x;
+    let y = this.fakePosition.y;
+    let i;
+    verif = "vide";
+    
+    //deplacement en ligne droite
+    while (x < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.fakePosition.x || y != this.fakePosition.y) verif = getFakePion(x, y) == undefined ? "vide" : "nonVide";
+      x++;
+    }
+    i = getFakePion(x - 1, y);
+    if(i != undefined){
+      if(pions[i].color != this.color){
+        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') return true;
+      }
+    }
+    
+    x = this.fakePosition.x;
+    y = this.fakePosition.y;
+    verif = 'vide';
+    while (x >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.fakePosition.x || y != this.fakePosition.y) verif = getFakePion(x, y) == undefined ? "vide" : "nonVide";
+      x--;
+    }
+    i = getFakePion(x + 1, y);
+    if(i != undefined){
+      if(pions[i].color != this.color){
+        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') return true;
+      }
+    }
+    
+    x = this.fakePosition.x;
+    y = this.fakePosition.y;
+    verif = 'vide';
+    while (y >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.fakePosition.x || y != this.fakePosition.y) verif = getFakePion(x, y) == undefined ? "vide" : "nonVide";
+      y--;
+    }
+    i = getFakePion(x, y + 1);
+    if(i != undefined){
+      if(pions[i].color != this.color){
+        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') return true;
+      }
+    }
+    
+    x = this.fakePosition.x;
+    y = this.fakePosition.y;
+    verif = 'vide';
+    while (y < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.fakePosition.x || y != this.fakePosition.y) verif = getFakePion(x, y) == undefined ? "vide" : "nonVide";
+      y++;
+    }
+    i = getFakePion(x, y - 1);
+    if(i != undefined){
+      if(pions[i].color != this.color){
+        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') return true;
+      }
+    }
+    
+    //deplacement en diagonale
+    x = this.fakePosition.x;
+    y = this.fakePosition.y;
+    verif='vide';
+    while (x < nombreCases && y < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.fakePosition.x || y != this.fakePosition.y) verif = getFakePion(x, y) == undefined ? "vide" : "nonVide";
+      x++;
+      y++;
+    }
+    i = getFakePion(x - 1, y - 1);
+    if(i != undefined){
+      if(pions[i].color != this.color){
+        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') return true;
+        let distance = abs(pions[i].fakePosition.x - this.fakePosition.x) + abs(pions[i].fakePosition.y - this.fakePosition.y);
+        if(pions[i].type == 'Pawn' && distance == 2) return true;
+      }
+    }
+    
+    x = this.fakePosition.x;
+    y = this.fakePosition.y;
+    verif = "vide";
+    while (x >= 0 && y >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.fakePosition.x || y != this.fakePosition.y) verif = getFakePion(x, y) == undefined ? "vide" : "nonVide";
+      x--;
+      y--;
+    }
+    i = getFakePion(x + 1, y + 1);
+    if(i != undefined){
+      if(pions[i].color != this.color){
+        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') return true;
+        let distance = abs(pions[i].fakePosition.x - this.fakePosition.x) + abs(pions[i].fakePosition.y - this.fakePosition.y);
+        if(pions[i].type == 'Pawn' && distance == 2) return true;
+      }
+    }
+    
+    x = this.fakePosition.x;
+    y = this.fakePosition.y;
+    verif = "vide";
+    while (x < nombreCases && y >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.fakePosition.x || y != this.fakePosition.y) verif = getFakePion(x, y) == undefined ? "vide" : "nonVide";
+      x++;
+      y--;
+    }
+    i = getFakePion(x - 1, y + 1);
+    if(i != undefined){
+      if(pions[i].color != this.color){
+        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') return true;
+        let distance = abs(pions[i].fakePosition.x - this.fakePosition.x) + abs(pions[i].fakePosition.y - this.fakePosition.y);
+        if(pions[i].type == 'Pawn' && distance == 2) return true;
+      }
+    }
+    
+    x = this.fakePosition.x;
+    y = this.fakePosition.y;
+    verif = "vide";
+    while (x >= 0 && y < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.fakePosition.x || y != this.fakePosition.y) verif = getFakePion(x, y) == undefined ? "vide" : "nonVide";
+      x--;
+      y++;
+    }
+    i = getFakePion(x + 1, y - 1);
+    if(i != undefined){
+      if(pions[i].color != this.color){
+        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') return true;
+        let distance = abs(pions[i].fakePosition.x - this.fakePosition.x) + abs(pions[i].fakePosition.y - this.fakePosition.y);
+        if(pions[i].type == 'Pawn' && distance == 2) return true;
+      }
+    }
+    
+    //deplacement cavalier
+    x = this.fakePosition.x;
+    y = this.fakePosition.y;
+    i = getFakePion(x + 2, y + 1); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
+    i = getFakePion(x + 1, y + 2); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
+    i = getFakePion(x - 2, y - 1); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
+    i = getFakePion(x - 1, y - 2); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
+    i = getFakePion(x + 2, y - 1); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
+    i = getFakePion(x + 1, y - 2); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
+    i = getFakePion(x - 2, y + 1); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
+    i = getFakePion(x - 1, y + 2); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
+    
+    return false;
   }
   
   //Efface le pion de sa position, retire son image du plateau
@@ -152,130 +326,302 @@ class Pion {
   }
   
   /*
-  * modifie les cases qui respectent les règles de déplacement du pion
+  * sélectionne les cases qui respectent les règles de déplacement du pion
   * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
   * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
   */
   selectNewCase(){
-    let td;
+    this.placementsPossibles = [];
     for(let y = 0; y < nombreCases; y++){
       for(let x = 0; x < nombreCases; x++){
-        td = document.getElementById('Case' + x + y);
+        let td = document.getElementById('Case' + x + y);
         
         if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
           if(abs(this.position.x - x) == abs(this.position.y - y)){
-             setCaseSelectionnable(td,this);
+            this.placementsPossibles.push(td);
           }
         }
       }
+    }
+  }
+  
+  //retire les placements possibles sur les pions amis
+  cleanMovePossible(){
+    for(let i = this.placementsPossibles.length - 1; i >= 0; i--){
+      if(i < this.placementsPossibles.length){
+        let td = this.placementsPossibles[i]; 
+        let x = parseInt(td.id.charAt(4));
+        let y = parseInt(td.id.charAt(5));
+        let j = getPion(x,y);
+        if(j != undefined){
+          if(pions[j].color == this.color){
+            this.placementsPossibles.splice(i, 1);
+          }
+        }
+      }
+    }
+  }
+  
+  editNewCases(){
+    for(let i = 0; i < this.placementsPossibles.length; i++){
+      setCaseSelectionnable(this.placementsPossibles[i],this);
     }
   }
 }
 
 //classe pour le pion Pawn
 class Pawn extends Pion {
-  constructor(color,x,y){
-    super(color,x,y);
-    if(color=='white') this.src= "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhitePawn.png";
-    else this.src="https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackPawn.png";
+  constructor(color, x, y) {
+    super(color, x, y);
+    if (color == "white")
+      this.src =
+        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhitePawn.png";
+    else
+      this.src =
+        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackPawn.png";
     this.firstMove = true;
-    this.type = 'Pawn';
+    this.type = "Pawn";
+    this.evolve = false;
   }
-  
-  selectNewCase(){
-    
-    
+
+  selectNewCase() {
     let td;
-    
-    td = document.getElementById('Case' + this.position.x + (this.position.y - 1));
-    if(getPion(this.position.x, this.position.y - 1) == undefined) //case devant lui
-      setCaseSelectionnable(td,this);
-    
-    if(this.firstMove == true && getPion(this.position.x, this.position.y - 1) == undefined){ //deuxieme case devant lui
-      td = document.getElementById('Case' + this.position.x + (this.position.y - 2));
-      setCaseSelectionnable(td,this);
+    this.placementsPossibles = [];
+    td = document.getElementById(
+      "Case" + this.position.x + (this.position.y - 1)
+    );
+    if (getPion(this.position.x, this.position.y - 1) == undefined)
+      //case devant lui
+      this.placementsPossibles.push(td);
+
+    if (
+      this.firstMove == true &&
+      getPion(this.position.x, this.position.y - 1) == undefined
+    ) {
+      //deuxieme case devant lui
+      td = document.getElementById(
+        "Case" + this.position.x + (this.position.y - 2)
+      );
+      this.placementsPossibles.push(td);
     }
-    
-    if(getPion(this.position.x - 1, this.position.y + 1) != undefined){ // pion en bas a gauche
-      td = document.getElementById('Case' + (this.position.x - 1) + (this.position.y + 1));
-      setCaseSelectionnable(td,this);
+
+    if (getPion(this.position.x - 1, this.position.y + 1) != undefined) {
+      // pion en bas a gauche
+      td = document.getElementById(
+        "Case" + (this.position.x - 1) + (this.position.y + 1)
+      );
+      this.placementsPossibles.push(td);
     }
-    if(getPion(this.position.x + 1, this.position.y - 1) != undefined){ //pion en haut a droite
-      td = document.getElementById('Case' + (this.position.x + 1) + (this.position.y - 1));
-      setCaseSelectionnable(td,this);
+    if (getPion(this.position.x + 1, this.position.y - 1) != undefined) {
+      //pion en haut a droite
+      td = document.getElementById(
+        "Case" + (this.position.x + 1) + (this.position.y - 1)
+      );
+      this.placementsPossibles.push(td);
     }
-    if(getPion(this.position.x - 1, this.position.y - 1) != undefined){ //pion en haut a gauche
-      td = document.getElementById('Case' + (this.position.x - 1) + (this.position.y - 1));
-      setCaseSelectionnable(td,this);
+    if (getPion(this.position.x - 1, this.position.y - 1) != undefined) {
+      //pion en haut a gauche
+      td = document.getElementById(
+        "Case" + (this.position.x - 1) + (this.position.y - 1)
+      );
+      this.placementsPossibles.push(td);
     }
-    if(getPion(this.position.x + 1, this.position.y + 1) != undefined){ //pion en bas a droite
-      td = document.getElementById('Case' + (this.position.x + 1) + (this.position.y + 1));
-      setCaseSelectionnable(td,this);
+    if (getPion(this.position.x + 1, this.position.y + 1) != undefined) {
+      //pion en bas a droite
+      td = document.getElementById(
+        "Case" + (this.position.x + 1) + (this.position.y + 1)
+      );
+      this.placementsPossibles.push(td);
     }
   }
-  
-  move(x,y){
-    super.move(x,y);
+
+  move(x, y) {
+    let me = this;
+    super.move(x, y);
     this.firstMove = false;
+    if(y == 0 && this.evolve == false){
+      console.log("evolve");
+      this.evolve = true;
+      let formulaire = 
+        '<form id = "evolve">\
+          <select id = "selectEvolve">\
+            <option value = "Knight">Knight</option>\
+            <option value = "Bishop">Bishop</option>\
+            <option value = "Queen">Queen</option>\
+            <option value = "Rook">Rook</option>\
+          </select>\
+          <button type = "submit">Valider le nouveau type</button>\
+        </form>';
+      document.getElementById('indication').innerHTML = formulaire;
+      let form = document.getElementById('evolve');
+      form.addEventListener('submit', function(e){
+        e.preventDefault(); //ne pas quitter la page
+        let select = document.getElementById('selectEvolve');
+        let choice = select.selectedIndex;
+        evolve(me, select.options[choice].value);
+      });
+    }
   }
 }
-
 
 //classe pour le pion Bishop
 class Bishop extends Pion {
-  
   //construit le pion
-  constructor(color,x,y) {
-    super(color,x,y);
-    if(color=='white') this.src= "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteBishop.png";
-    else this.src="https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackBishop.png";
-    this.type = 'Bishop';
+  constructor(color, x, y) {
+    super(color, x, y);
+    if (color == "white")
+      this.src =
+        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteBishop.png";
+    else
+      this.src =
+        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackBishop.png";
+    this.type = "Bishop";
   }
-  
+
   selectNewCase(){
+    this.placementsPossibles = [];
     let td;
-    for(let y = 0; y < nombreCases; y++){
-      for(let x = 0; x < nombreCases; x++){
-        td = document.getElementById('Case' + x + y);
-        
-        if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
-          if(abs(this.position.x - x) == abs(this.position.y - y)){
-             setCaseSelectionnable(td,this);
-          }
-        }
-      }
+    var verif = "vide";
+    var x = this.position.x;
+    var y = this.position.y;
+   
+    while (x < nombreCases && y < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x++;
+      y++;
+    }
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = "vide";
+    while (x >= 0 && y >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x--;
+      y--;
+    }
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = "vide";
+    while (x < nombreCases && y >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x++;
+      y--;
+    }
+    x = this.position.x;
+    y = this.position.y;
+    verif = "vide";
+    while (x >= 0 && y < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x--;
+      y++;
     }
   }
 }
 
+//classe pour le pion Bishop
+class Rook extends Pion {
+  //construit le pion
+  constructor(color, x, y) {
+    super(color, x, y);
+    if (color == "white")
+      this.src =
+        "https://cdn.glitch.com/fff49e0e-ad22-4de8-8576-bee7f4fc6e56%2FWhiteRook.png?v=1585100879087";
+    else
+      this.src =
+        "https://cdn.glitch.com/fff49e0e-ad22-4de8-8576-bee7f4fc6e56%2FBlackRook.png?v=1585100875416";
+    this.type = "Rook";
+  }
+
+  selectNewCase() {
+    this.placementsPossibles = [];
+    let td;
+    var verif;
+    let x = this.position.x;
+    let y = this.position.y;
+    verif = "vide";
+    while (x < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x++;
+    }
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = 'vide';
+    while (x >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x--;
+    }
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = 'vide';
+    while (y >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      y--;
+    }
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = 'vide';
+    while (y < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      y++;
+    }
+  }
+}
 
 //classe pour le pion Knight
-class Knight extends Pion{
-  
+class Knight extends Pion {
   //construit le pion
-  constructor(color,x,y) {
-    super(color,x,y);
-    if(color=='white') this.src= "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteKnight.png";
-    else this.src="https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackKnight.png";
-    this.type = 'Knight';
+  constructor(color, x, y) {
+    super(color, x, y);
+    if (color == "white")
+      this.src =
+        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteKnight.png";
+    else
+      this.src =
+        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackKnight.png";
+    this.type = "Knight";
   }
-  
+
   /*
-  * modifie les cases qui respectent les règles de déplacement du pion
-  * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
-  * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
-  */
-  selectNewCase(){
+   * sélectionne les cases qui respectent les règles de déplacement du pion
+   * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
+   * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
+   */
+  selectNewCase() {
+    this.placementsPossibles = [];
     let td;
-    for(let y = 0; y < nombreCases; y++){
-      for(let x = 0; x < nombreCases; x++){
-        td = document.getElementById('Case' + x + y);
-        
-        if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
-          if((abs(this.position.x - x) <= 2 && abs(this.position.x - x) >= 0) 
-             && (abs(this.position.y - y) <= 2 && abs(this.position.y - y) >= 0)
-             && ((abs(this.position.y - y) + abs(this.position.x - x)) == 3)){
-             setCaseSelectionnable(td,this);
+    for (let y = 0; y < nombreCases; y++) {
+      for (let x = 0; x < nombreCases; x++) {
+        td = document.getElementById("Case" + x + y);
+
+        if (!(this.position.x == x && this.position.y == y)) {
+          //rendre toutes les cases selectionnable sauf celle du pion
+          if (
+            abs(this.position.x - x) <= 2 &&
+            abs(this.position.x - x) >= 0 &&
+            (abs(this.position.y - y) <= 2 && abs(this.position.y - y) >= 0) &&
+            abs(this.position.y - y) + abs(this.position.x - x) == 3
+          ) {
+            this.placementsPossibles.push(td);
           }
         }
       }
@@ -286,96 +632,145 @@ class Knight extends Pion{
 //classe pour le pion Queen
 
 class Queen extends Pion {
-  
   //construit le pion
-  constructor(color,x,y) {
-    super(color,x,y);
-    if(color=='white') this.src= "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteQueen.png";
-    else this.src="https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackQueen.png";
-    this.type = 'Queen';
+  constructor(color, x, y) {
+    super(color, x, y);
+    if (color == "white")
+      this.src =
+        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteQueen.png";
+    else
+      this.src =
+        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackQueen.png";
+    this.type = "Queen";
   }
-  
+
   /*
-  * modifie les cases qui respectent les règles de déplacement du pion
-  * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
-  * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
-  */
-  selectNewCase(){
+   * sélectionne les cases qui respectent les règles de déplacement du pion
+   * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
+   * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
+   */
+  selectNewCase() {
+    this.placementsPossibles = [];
     let td;
-    let td1;
-    let td2;
-    let td3;
-    let td4;
-    let position_X = this.position.x;
-    let position_Y = this.position.y;
-    for(let y = 0; y < nombreCases; y++){
-      for(let x = 0; x < nombreCases; x++){
-        td = document.getElementById('Case' + x + y);
-        if(!(position_X == x && position_Y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
-          if(abs(this.position.x - x) == abs(this.position.y - y)){
-             setCaseSelectionnable(td,this);
-          }
-        } 
-      }
-    }
-   
-     
-    for(let y = 4; y < nombreCases; y++){
-    for(let x=this.position.x; x < nombreCases; x++){
-       td1 = document.getElementById('Case' + this.position.x + y);
-         setCaseSelectionnable(td1,this);
-      }
-    }
-  
+    var verif;
+    let x = this.position.x;
+    let y = this.position.y;
+    verif = "vide";
     
-    for(let y = 0; y < 4; y++){
-    for(let x=this.position.x; x < nombreCases; x++){
-       td2 = document.getElementById('Case' + this.position.x + y);
-         setCaseSelectionnable(td2,this);
-      }
+    while (x < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x++;
     }
-     
-      
-    let y=this.position.y;
-    for(let x=this.position.x; x >-1; x--){
-       td3 = document.getElementById('Case' + x + y);
-         setCaseSelectionnable(td3,this);
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = 'vide';
+    while (x >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x--;
     }
-     
-     
-    for(let x=this.position.x; x <nombreCases; x++){
-       td3 = document.getElementById('Case' + x + y);
-         setCaseSelectionnable(td3,this);
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = 'vide';
+    while (y >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      y--;
+    }
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = 'vide';
+    while (y < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      y++;
+    }
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif='vide';
+    while (x < nombreCases && y < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x++;
+      y++;
+    }
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = "vide";
+    while (x >= 0 && y >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x--;
+      y--;
+    }
+    
+    x = this.position.x;
+    y = this.position.y;
+    verif = "vide";
+    while (x < nombreCases && y >= 0 && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x++;
+      y--;
+    }
+    x = this.position.x;
+    y = this.position.y;
+    verif = "vide";
+    while (x >= 0 && y < nombreCases && verif != "nonVide") {
+      td = document.getElementById("Case" + x + y);
+      if(x != this.position.x || y != this.position.y) verif = getPion(x, y) == undefined ? "vide" : "nonVide";
+      this.placementsPossibles.push(td);
+      x--;
+      y++;
     }
   }
 }
 
 //classe pour le pion King
 class King extends Pion {
-  
   //construit le pion
-  constructor(color,x,y) {
-    super(color,x,y);
-    if (color == 'white') this.src = "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteKing.png";
-    else this.src = "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackKing.png";
-    this.type = 'King';
+  constructor(color, x, y) {
+    super(color, x, y);
+    if (color == "white")
+      this.src =
+        "https://cdn.glitch.com/fff49e0e-ad22-4de8-8576-bee7f4fc6e56%2FWhiteKing.png?v=1585164539251";
+    else this.src =
+        "https://cdn.glitch.com/fff49e0e-ad22-4de8-8576-bee7f4fc6e56%2FBlackKing.png?v=1585164538308";
+    this.type = "King";
   }
-  
+
   /*
-  * modifie les cases qui respectent les règles de déplacement du pion
-  * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
-  * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
-  */
-  selectNewCase(){
+   * sélectionne les cases qui respectent les règles de déplacement du pion
+   * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
+   * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
+   */
+  selectNewCase() {
+    this.placementsPossibles = [];
     let td;
-    for(let y = 0; y < nombreCases; y++){
-      for(let x = 0; x < nombreCases; x++){
-        td = document.getElementById('Case' + x + y);
-        
-        if(!(this.position.x == x && this.position.y == y)){ //rendre toutes les cases selectionnable sauf celle du pion
-          if((abs(this.position.x - x) == 1 || abs(this.position.x - x) == 0) 
-             && (abs(this.position.y - y) == 0 || abs(this.position.y - y) == 1)){
-             setCaseSelectionnable(td,this);
+    for (let y = 0; y < nombreCases; y++) {
+      for (let x = 0; x < nombreCases; x++) {
+        td = document.getElementById("Case" + x + y);
+
+        if (!(this.position.x == x && this.position.y == y)) {
+          //rendre toutes les cases selectionnable sauf celle du pion
+          if (
+            (abs(this.position.x - x) == 1 || abs(this.position.x - x) == 0) &&
+            (abs(this.position.y - y) == 0 || abs(this.position.y - y) == 1)
+          ) {
+            this.placementsPossibles.push(td);
           }
         }
       }
@@ -387,23 +782,48 @@ class King extends Pion {
 //initialise les pions selon la couleur du joueur, les pions qui lui sont attribués seront en bas du plateau
 function initPions(){
   console.log('initialisation des pions');
-  if(colorPlayer == 'white') {
-    pions = [new Pawn('black',0,1),new Pawn('black',1,1),new Pawn('black',2,1),new Pawn('black',3,1),
-               new Pawn('black',4,1),new Pawn('black',5,1),new Pawn('black',6,1),new Pawn('black',7,1),
-               new Pawn('white',0,6),new Pawn('white',1,6),new Pawn('white',2,6),new Pawn('white',3,6),
-               new Pawn('white',4,6),new Pawn('white',5,6),new Pawn('white',6,6),new Pawn('white',7,6),
-               new King('black',4,0),new King('white',4,7),new Queen('black',3,0),new Queen('white',3,7),
-               new Bishop('black',2,0),new Bishop('black',5,0),new Bishop('white',2,7),new Bishop('white',5,7),
-               new Knight('black',1,0),new Knight('black',6,0),new Knight('white',1,7),new Knight('white',6,7)];
+  let autrePion = (colorPlayer == 'white')? 'black' : 'white';
+  pions = [
+    new Pawn(autrePion, 0, 1),
+    new Pawn(autrePion, 1, 1),
+    new Pawn(autrePion, 2, 1),
+    new Pawn(autrePion, 3, 1),
+    new Pawn(autrePion, 4, 1),
+    new Pawn(autrePion, 5, 1),
+    new Pawn(autrePion, 6, 1),
+    new Pawn(autrePion, 7, 1),
+    new Pawn(colorPlayer, 0, 6),
+    new Pawn(colorPlayer, 1, 6),
+    new Pawn(colorPlayer, 2, 6),
+    new Pawn(colorPlayer, 3, 6),
+    new Pawn(colorPlayer, 4, 6),
+    new Pawn(colorPlayer, 5, 6),
+    new Pawn(colorPlayer, 6, 6),
+    new Pawn(colorPlayer, 7, 6),
+    new Bishop(autrePion, 2, 0),
+    new Bishop(autrePion, 5, 0),
+    new Bishop(colorPlayer, 2, 7),
+    new Bishop(colorPlayer, 5, 7),
+    new Knight(autrePion, 1, 0),
+    new Knight(autrePion, 6, 0),
+    new Knight(colorPlayer, 1, 7),
+    new Knight(colorPlayer, 6, 7),
+    new Rook(autrePion, 0, 0),
+    new Rook(autrePion, 7, 0),
+    new Rook(colorPlayer, 7, 7),
+    new Rook(colorPlayer, 0, 7)
+  ];
+  if(colorPlayer == 'white'){
+    pions.push(new Queen(autrePion, 3, 0),
+    new Queen(colorPlayer, 3, 7),
+    new King(autrePion, 4, 0),
+    KingJoueur = new King(colorPlayer, 4, 7));
   }
-  else if(colorPlayer == 'black') {
-    pions = [new Pawn('white',0,1),new Pawn('white',1,1),new Pawn('white',2,1),new Pawn('white',3,1),
-               new Pawn('white',4,1),new Pawn('white',5,1),new Pawn('white',6,1),new Pawn('white',7,1),
-               new Pawn('black',0,6),new Pawn('black',1,6),new Pawn('black',2,6),new Pawn('black',3,6),
-               new Pawn('black',4,6),new Pawn('black',5,6),new Pawn('black',6,6),new Pawn('black',7,6),
-               new King('white',3,0),new King('black',3,7),new Queen('white',4,0),new Queen('black',4,7),
-               new Bishop('white',2,0),new Bishop('white',5,0),new Bishop('black',2,7),new Bishop('black',5,7),
-               new Knight('white',1,0),new Knight('white',6,0),new Knight('black',1,7),new Knight('black',6,7)];
+  else {
+    pions.push(new Queen(autrePion, 4, 0),
+    new Queen(colorPlayer, 4, 7),
+    new King(autrePion, 3, 0),
+    KingJoueur = new King(colorPlayer, 3, 7));
   }
 }
 
@@ -425,6 +845,15 @@ function getPion(x,y){
   for(let i = 0; i < pions.length; i++) {
     if(pions[i] != undefined)
       if(pions[i].position.x == x && pions[i].position.y == y) return i;
+  }
+  return undefined;
+}
+
+//retourne le pion present en position x,y, et undefined sinon
+function getFakePion(x,y){
+  for(let i = 0; i < pions.length; i++) {
+    if(pions[i] != undefined)
+      if(pions[i].fakePosition.x == x && pions[i].fakePosition.y == y) return i;
   }
   return undefined;
 }
@@ -489,7 +918,7 @@ function resize(){
 * la case devient rouge si un pion ennemi est présent sur la case
 * la case reste inchangé si un pion ami est présent sur la case
 */
-function setCaseSelectionnable(td,pion){
+function setCaseSelectionnable(td,pion, check){
   //couleur de discernement de la case pour être choisit pour le déplacement (rouge si un pion se trouve déjà sur la case)
   var newClass = (td.firstChild == undefined)? 'selectCase' : 'selectCollision';
   
@@ -497,12 +926,15 @@ function setCaseSelectionnable(td,pion){
     let i = getPion(parseInt(td.id.charAt(4)),parseInt(td.id.charAt(5)));
     if(i != undefined) {
       if(pions[i].color != pion.color){ //c'est un pion adverse donc on peut mettre la case en rouge sinon la case reste inchangée
-        td.className = newClass;
+        if(check == undefined) td.className = newClass;
+        else {
+          
+        }
       }
     }
   }
   else { //s'il n'y a pas de pions
-    td.className = newClass;
+    if(check == undefined) td.className = newClass;
   }
 }
 
@@ -545,6 +977,8 @@ function eventTableEchec(event){
         source = new Position2D(x,y);
         document.getElementById('Case' + source.x + source.y).className = 'selectPion'; //la case devient bleu pour voir le pion sélectionné
         pions[i].selectNewCase();
+        pions[i].cleanMovePossible();
+        pions[i].editNewCases();
         indice = i;
       }
     }
@@ -555,11 +989,17 @@ function eventTableEchec(event){
       resetAllCases();
     }
     else { //la case n'est pas la position source
-      if(event.target.className == 'selectCase'){ //la case est accessible par le pion
+      pions[indice].fakePosition.set(x,y);
+      if(KingJoueur.isEdible() == true) {
+        alert('Placement impossible, votre roi serait en Echec');
+        pions[indice].fakePosition.setP(pions[indice].position);
+      }
+      else if(event.target.className == 'selectCase'){ //la case est accessible par le pion
         pions[indice].move(x,y);
         resetAllCases();
         destination = new Position2D(x,y);
         jouer = false;
+        if(!(pions[indice].type == 'Pawn' && y == 0)) document.getElementById('indication').innerHTML = "C'est au tour de l'adversaire";
         socket.emit('deplacement', source.x + ',' + source.y + ',' + destination.x + ',' + destination.y); //transfert des positions relatives au déplacement du pion au serveur
         source = undefined;
       }
@@ -573,6 +1013,7 @@ function eventTableEchec(event){
         pions[indice].move(x,y);
         destination = new Position2D(x,y);
         jouer = false;
+        if(!(pions[indice].type == 'Pawn' && y == 0)) document.getElementById('indication').innerHTML = "C'est au tour de l'adversaire";
         socket.emit('deplacement', source.x + ',' + source.y + ',' + destination.x + ',' + destination.y); //transfert des positions relatives au déplacement du pion au serveur
         source = undefined;
       }
@@ -600,11 +1041,115 @@ socket.on('deplacement', function(message){
   else { //déplacement sur une case vide
     pions[i].move(destination.x, destination.y);
   }
-  jouer = true;
   source = undefined;
+  if(!(pions[i].type == 'Pawn' && pions[i].position.y == 7)) {
+    jouer = true;
+    document.getElementById('indication').innerHTML = 'A vous de jouer';
+  
+    if(KingJoueur.isEdible() == true){
+      if(EchecEtMath() == true) {
+        alert('Echec et Math ! Vous avez perdu');
+        socket.emit('fin', '');
+        document.getElementById('indication').innerHTML = '<a href = "/">Retourner à l\'accueil</a>';
+      }
+      else alert("Echec !");
+    }
+  }
+});
+
+socket.on('evolve', function(type){
+  for(let i = 0; i < pions.length; i++){
+    if(pions[i] != undefined){
+      if(pions[i].type == 'Pawn'){
+        if(pions[i].position.y == 7){
+          pions[i].delete();
+          
+          let pos = pions[i].position;
+          let color = pions[i].color;
+          pions[i] = undefined;
+          
+          if(type == 'Knight'){
+            pions.unshift(new Knight(color,pos.x, pos.y));
+          }
+          if(type == 'Rook'){
+            pions.unshift(new Rook(color,pos.x, pos.y));
+          }
+          if(type == 'Queen'){
+            pions.unshift(new Queen(color,pos.x, pos.y));
+          }
+          if(type == 'Bishop'){
+            pions.unshift(new Bishop(color,pos.x, pos.y));
+          }
+          pions[0].affiche();
+        }
+      }
+    }
+  }
+  document.getElementById('indication').innerHTML = 'A vous de jouer';
+  jouer = true;
+  if(KingJoueur.isEdible() == true){
+    if(EchecEtMath() == true) {
+      alert('Echec et Math ! Vous avez perdu');
+      socket.emit('fin', '');
+      document.getElementById('indication').innerHTML = '<a href = "/">Retourner à l\'accueil</a>';
+    }
+    else alert("Echec !");
+  }
+  console.log("fin evolution");
 });
 
 //retourne la valeur absolue de "valeur"
 function abs(valeur){
   return (valeur > 0)? valeur : -valeur;
+}
+
+function EchecEtMath(){
+  for(let i = 0; i < pions.length; i++){
+    if(pions[i] != undefined){
+      if(pions[i].color == colorPlayer){
+        pions[i].selectNewCase();
+        pions[i].cleanMovePossible();
+        for(let j = 0; j < pions[i].placementsPossibles.length; j++){
+          if(testEdible(i,j) == false) return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+function evolve(pawn, type){
+  pawn.delete();
+  let pos = pawn.position;
+  let color = pawn.color;
+  pawn = undefined;
+  if(type == 'Knight'){
+    pions.unshift(new Knight(color,pos.x, pos.y));
+  }
+  if(type == 'Rook'){
+    pions.unshift(new Rook(color,pos.x, pos.y));
+  }
+  if(type == 'Queen'){
+    pions.unshift(new Queen(color,pos.x, pos.y));
+  }
+  if(type == 'Bishop'){
+    pions.unshift(new Bishop(color,pos.x, pos.y));
+  }
+  pions[0].affiche();
+  
+  socket.emit('evolve', type);
+  document.getElementById('indication').innerHTML = "C'est au tour de l'adversaire";
+}
+
+function testEdible(i,j){
+  let td = pions[i].placementsPossibles[j];
+  let x = parseInt(td.id.charAt(4));
+  let y = parseInt(td.id.charAt(5));
+  pions[i].fakePosition.set(x,y);
+  if(KingJoueur.isEdible() == false) {
+    pions[i].fakePosition.setP(pions[i].position);
+    return false;
+  }
+  else return true;
+  pions[i].fakePosition.setP(pions[i].position);
 }

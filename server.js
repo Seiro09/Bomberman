@@ -131,6 +131,33 @@ io.sockets.on('connection', function(socket){
     }
   });
   
+  socket.on('evolve', function(message){
+    let i = getSalonByPlayer(socket.id);
+    if(i != undefined) {
+      if(salons[i].whitePlayer.id == socket.id){
+        salons[i].blackPlayer.emit('evolve', message);
+      }
+      else {
+        salons[i].whitePlayer.emit('evolve', message);
+      }
+    }
+  });
+  
+  socket.on('fin', function(message){
+    let i = getSalonByPlayer(socket.id);
+    if(i != undefined) { //le client a t-il quitté un salon ?
+      if(salons[i].whitePlayer.id == socket.id){ //oui car il était joueur blanc, on indique au joueur noir de quitter s'il est toujours dans le salon
+        if(salons[i].blackPlayer != undefined) salons[i].blackPlayer.emit('fin','');
+      }
+      if(salons[i].blackPlayer != undefined){ //le joueur noir est-il présent dans le salon ?
+        if(salons[i].blackPlayer.id == socket.id){ //oui car il était joueur blanc, on indique au joueur noir de quitter
+          if(salons[i].whitePlayer != undefined) salons[i].whitePlayer.emit('fin','');
+        }
+      }
+      console.log('suppression du salon ' + salons[i].codeSalon);
+      salons.splice(i,1); //suppression du salon
+    }
+  });
   
   //un client est parti
   socket.on('disconnect', function(message){
@@ -145,7 +172,7 @@ io.sockets.on('connection', function(socket){
         }
       }
       console.log('suppression du salon ' + salons[i].codeSalon);
-      salons.splice(i); //suppression du salon
+      salons.splice(i,1); //suppression du salon
     }
   });
 });
