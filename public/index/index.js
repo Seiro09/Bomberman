@@ -16,7 +16,7 @@ function addEvent(){
     //l'utilisateur clique sur rejoindre, on lui demande le code du salon
     if(choix == 'join'){
       let codeSalon = prompt("Entrez le code de salon à rejoindre");
-      if(codeSalon != null){ //il annule sa décision de joindre un salon
+      if(codeSalon != null){
         form.action = '/salon/' + codeSalon;
         form.submit();
       }

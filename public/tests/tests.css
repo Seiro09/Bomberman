@@ -62,8 +62,8 @@
     background-color : white;
     overflow: hidden;
     line-height: 0;
-    width:7vw;
-    height: 7vw;
+    width:8w;
+    height: 8vw;
 
   }
 
@@ -73,8 +73,8 @@
     background-color : maroon;
     overflow: hidden;
     line-height: 0;
-    width:7vw;
-    height: 7vw;
+    width:8vw;
+    height: 8vw;
 
   }
   
@@ -84,8 +84,8 @@
     background-color : YellowGreen;
     overflow: hidden;
     line-height: 0;
-    width:7vw;
-    height: 7vw;
+    width:8vw;
+    height: 8vw;
   }
   
   #tableEchec .selectCollision {
@@ -94,8 +94,8 @@
     background-color : red;
     overflow: hidden;
     line-height: 0;
-    width:7vw;
-    height: 7vw;
+    width:8vw;
+    height: 8vw;
   }
   
   #tableEchec .selectPion {
@@ -104,8 +104,8 @@
     background-color : blue;
     overflow: hidden;
     line-height: 0;
-    width:7vh;
-    height: 7vh;
+    width:8vw;
+    height: 8vw;
   }
 }
 
@@ -127,8 +127,8 @@
     background-color : white;
     overflow: hidden;
     line-height: 0;
-    width:7vh;
-    height: 7vh;
+    width:8vh;
+    height: 8vh;
 
   }
 
@@ -138,8 +138,8 @@
     background-color : maroon;
     overflow: hidden;
     line-height: 0;
-    width:7vh;
-    height: 7vh;
+    width:8vh;
+    height: 8vh;
   }
   
   #tableEchec .selectCase {
@@ -148,8 +148,8 @@
     background-color : YellowGreen;
     overflow: hidden;
     line-height: 0;
-    width:7vh;
-    height: 7vh;
+    width:8vh;
+    height: 8vh;
   }
   
   #tableEchec .selectCollision {
@@ -158,8 +158,8 @@
     background-color : red;
     overflow: hidden;
     line-height: 0;
-    width:7vh;
-    height: 7vh;
+    width:8vh;
+    height: 8vh;
   }
   
   #tableEchec .selectPion {
@@ -168,8 +168,8 @@
     background-color : blue;
     overflow: hidden;
     line-height: 0;
-    width:7vh;
-    height: 7vh;
+    width:8vh;
+    height: 8vh;
   }
 }
 
