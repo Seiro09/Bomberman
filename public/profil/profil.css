@@ -13,7 +13,7 @@ button, input {
   border-radius: 10px;
 }
 
-#banniereTable {
+#box {
   border-style : outset;
   border-radius: 30px;
   margin : auto;
@@ -22,32 +22,40 @@ button, input {
   background-color : grey;
 }
 
-p {
+p, th, td {
   text-align : center;
   font-family : Gill Sans, sans-serif;
 }
 
-.lds-dual-ring {
-  display: inline-block;
-  width: 80px;
-  height: 80px;
+#amis {
+  border: 1px solid grey;
 }
-.lds-dual-ring:after {
-  content: " ";
-  display: block;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border-radius: 50%;
-  border: 6px solid #fff;
-  border-color: #000 transparent #000 transparent;
-  animation: lds-dual-ring 1.2s linear infinite;
+
+#amis {
+  background-color : #aaaaaa;
 }
-@keyframes lds-dual-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+
+#amis th, #amis td {
+  font-size : 24px;
+  border: 0px solid grey;
+  background-color : white;
+}
+
+#rechercher {
+	background-size : 100%;
+	background-image : url("https://cdn.glitch.com/139185a8-2845-442f-9b69-25bf7b642875%2Floupe.png?v=1587919373754");
+	color : white;
+}
+
+.amiConnecte {
+  color : green;
+}
+
+.amiDeconnecte {
+  color : red;
+}
+
+.suppB {
+  font-weight: bold;
+  color : red;
 }

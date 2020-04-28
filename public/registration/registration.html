@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    <link rel="stylesheet" href="/registration/registration.css">
+		<title>Connexion</title>
+	</head>
+	<body>
+		<div class="registration-form">
+			<h1>Inscription</h1>
+			<form id = "form">
+				<input id = "username" type="text" pattern = "([A-Za-z0-9_@])([A-Za-z0-9_@])+" title = "Caractères autorisés : lettres, chiffres, '_', '@' et au moins 2 caractères" placeholder="Pseudonyme" required>
+        <input id = "password1" type="password" placeholder="Entrez un mot de passe" required>
+        <input id = "password2" type="password" placeholder="Confirmez votre mot de passe" required>
+        <meter max="4" id="meter" value = "0"></meter>
+        <label class = "petit">Force du mot de passe : <force id = "force">Aucune</force> <aide id = "aide" title = "">(?)</aide></label>
+        <p class = "petit">Votre mot de passe doit contenir au moins 8 caractères et une force au moins moyenne.</p>
+        <p id = "registerResult"></p>
+				<button id = "valider" type="submit">Valider</button>
+			</form>
+      <p></p>
+      <a href = "/login"><button type="submit">Se connecter à un compte existant</button></a>
+		</div>
+    <script type = "text/javascript" src = "/socket.io/socket.io.js"></script>
+    <script src= "https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+    <script type= "text/javascript" src="/lib/sha256.js"></script> 
+    <script type = "text/javascript" src = "/registration/registration.js"></script>
+	</body>
+</html>

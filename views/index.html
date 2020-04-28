@@ -7,27 +7,32 @@
   </head>  
   <body id = "body">
     <section id = "accueil">
-      <p id = "titre">Jeu d'Echec en ligne</p>
-      <form id = "banniereTable">
-        <p id = "row0">
+      <p id = "titre">ChessMat</p>
+      <form id = "form">
+        <p id = "infoSession"></p>
+        <p>
+          <button type = "submit" id = "profil">Mon compte</button>
+          <button type = "submit" id = "disconnect">Se déconnecter</button>
+        </p>
+        <p id = "row1">
           <button type = "submit" id = "create">Créer un salon privé</button>
           <button type = "submit" id = "join">Rejoindre un salon privé</button>
         </p>
-        <p id = "row1">
+        <p id = "row2">
           <label for = "level">Votre niveau :</label>
           <select id = "level-select">
-            <option>Débutant</option>
-            <option>Intermédiaire</option>
-            <option>Professionnel</option>
-            <option>Expert</option>
+            <option value = "0">Débutant</option>
+            <option value = "1">Intermédiaire</option>
+            <option value = "2">Expert</option>
           </select>
           <button type = "submit" id = "aleatoire">Rechercher un adversaire</button>
         </p>
-        <p id = "row2">
+        <p id = "row3">
           <button type = "submit" id = "regles">Règles du jeu</button>
         </p>
       </form>
     </section>
+    <script type = "text/javascript" src = "/socket.io/socket.io.js"></script>
     <script type = "text/javascript" src = "/index/index.js"></script>
   </body>
 </html>
