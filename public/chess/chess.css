@@ -1,218 +1,171 @@
-/*#entete {
-  padding-top:10px;
-  border-style : outset;
-  border-color: #393939;
-  border-width: 0.5em;
-  width : 100-10vw;
-  height : 1em;
-  text-align : center;
-  font-family : monospace, sans-serif;
-  font-size : 5vw;
+#titrePage {
+  font-family: Brush Script MT;
+  width: 100-10vw;
+  height: 1em;
+  text-align: center;
+  font-size: 5vw;
   font-weight: 100%;
   color: black;
-  
-}*/
-
-
-#jeu {
-  border-style : groove;
-  margin-top : 1%;
 }
 
-
-/*@media all and (orientation: landscape) and (min-width: 1500px) {
-  #header {
-    border-style : outset;
-    border-color: blue;
-    border-width: 2vh;
-    padding: 1px;
-    text-align: center;
-    color: black;
-    font-size: 5vh;
-  }
-}*/
+#indication {
+  font-family: Tahoma, Geneva, sans-serif;
+  color: white;
+  padding: 10px;
+  font-size: 3vh;
+  border: 1px solid white;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color: black;
+  box-shadow: 10px 10px 5px grey;
+}
 
 #tableEchec {
-  border-style : solid;
+  border-style: solid;
   border-width: thin;
-  color : black;
-  margin : auto auto;
-  background-color : white;
-  margin-top : 10px;
-  margin-bottom : 10px;
+  color: black;
+  margin: auto auto;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
   border-collapse: collapse;
+  box-shadow: 10px 10px 5px grey;
 }
 
-
 @media all and (orientation: portrait) {
-    #header {
-    border-style : outset;
+  #header {
+    border-style: outset;
     border-color: #393939;
     border-width: 2vh;
     padding: 1px;
     text-align: center;
     color: black;
     font-size: 3vh;
-
   }
-  
+
   #tableEchec .whiteCase {
     border-width: thin;
-    border-style : solid;
-    background-color : white;
+    border-style: solid;
+    background-color: white;
     overflow: hidden;
     line-height: 0;
-    width:8w;
+    width: 8w;
     height: 8vw;
-
   }
 
   #tableEchec .blackCase {
     border-width: thin;
-    border-style : solid;
-    background-color : maroon;
+    border-style: solid;
+    background-color: black;
     overflow: hidden;
     line-height: 0;
-    width:8vw;
+    width: 8vw;
     height: 8vw;
+  }
 
-  }
-  
-    #tableEchec .selectCase {
+  #tableEchec .selectCase {
     border-width: thin;
-    border-style : solid;
-    background-color : YellowGreen;
+    border-style: solid;
+    background-color: YellowGreen;
     overflow: hidden;
     line-height: 0;
-    width:8vw;
+    width: 8vw;
     height: 8vw;
   }
-  
+
   #tableEchec .selectCollision {
     border-width: thin;
-    border-style : solid;
-    background-color : red;
+    border-style: solid;
+    background-color: red;
     overflow: hidden;
     line-height: 0;
-    width:8vw;
+    width: 8vw;
     height: 8vw;
   }
-  
+
   #tableEchec .selectPion {
     border-width: thin;
-    border-style : solid;
-    background-color : blue;
+    border-style: solid;
+    background-color: blue;
     overflow: hidden;
     line-height: 0;
-    width:8vw;
+    width: 8vw;
     height: 8vw;
   }
 }
 
-@media all and (orientation: landscape){
-   #header {
-    border-style : outset;
+@media all and (orientation: landscape) {
+  #header {
+    border-style: outset;
     border-color: #393939;
     border-width: 2vh;
     padding: 1px;
     text-align: center;
     color: black;
     font-size: 5vh;
-
   }
-  
+
   #tableEchec .whiteCase {
     border-width: thin;
-    border-style : solid;
-    background-color : white;
+    border-style: solid;
+    background-color: white;
     overflow: hidden;
     line-height: 0;
-    width:8vh;
+    width: 8vh;
     height: 8vh;
-
   }
 
   #tableEchec .blackCase {
     border-width: thin;
-    border-style : solid;
-    background-color : maroon;
+    border-style: solid;
+    background-color: black;
     overflow: hidden;
     line-height: 0;
-    width:8vh;
+    width: 8vh;
     height: 8vh;
   }
-  
+
   #tableEchec .selectCase {
     border-width: thin;
-    border-style : solid;
-    background-color : YellowGreen;
+    border-style: solid;
+    background-color: YellowGreen;
     overflow: hidden;
     line-height: 0;
-    width:8vh;
+    width: 8vh;
     height: 8vh;
   }
-  
+
   #tableEchec .selectCollision {
     border-width: thin;
-    border-style : solid;
-    background-color : red;
+    border-style: solid;
+    background-color: red;
     overflow: hidden;
     line-height: 0;
-    width:8vh;
+    width: 8vh;
     height: 8vh;
   }
-  
+
   #tableEchec .selectPion {
     border-width: thin;
-    border-style : solid;
-    background-color : blue;
+    border-style: solid;
+    background-color: blue;
     overflow: hidden;
     line-height: 0;
-    width:8vh;
+    width: 8vh;
     height: 8vh;
   }
 }
 
 
-/*@media all and (min-width: 301px) and (max-width: 600px){
-   #header {
-    border-style : outset;
-    border-color: #393939;
-    border-width: 2vh;
-    padding: 1px;
-    text-align: center;
-    color: black;
-    font-size: 4vh;
-  }
-  
-  #tableEchec .whiteCase {
-    border-width: thin;
-    border-style : solid;
-    background-color : white;
-    overflow: hidden;
-    line-height: 0;
-    width:7vh;
-    height: 7vh;
-  }
-  #tableEchec .blackCase {
-    border-width: thin;
-    border-style : solid;
-    background-color : black;
-    overflow: hidden;
-    line-height: 0;
-    width:7vh;
-    height: 7vh;
-  }
-}*/
-
-
-/*mes tests*/
-/*
-#Case12 {
-  color : blue;
-  background-color : white;
+body {
+  background-image: url(https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-size: 30px;
+  font-family: Gill Sans, sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
-*/
-/*#tableEchec tr :hover {
-  color : cyan;
-}*/

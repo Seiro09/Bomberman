@@ -65,7 +65,7 @@ socket.on('giveColor', function(message){
   console.log(message);
   if(message == 'error'){ //le serveur envoie error car 2 joueurs sont déjà présents
     let plateau = document.getElementById('plateau');
-    let p = document.createElement('p');
+    let p = document.createElement('indication');
     plateau.appendChild(p);
     p.innerHTML = 'Ce salon est complet. Cliquez <a href = "/accueil">ici</a> pour revenir sur la page d\'accueil.';
   }
@@ -96,9 +96,7 @@ socket.on('ready', function(message){
 socket.on('stop', function(message){
   console.log('stop');
   let plateau = document.getElementById('plateau');
-    let p = document.createElement('p');
-    plateau.innerHTML = '';
-    plateau.appendChild(p);
+    let p = document.getElementById('indication');
     p.innerHTML = 'Votre adversaire a quitté, le salon a donc été fermé. Cliquez <a href = "/accueil">ici</a> pour revenir sur la page d\'accueil.';
 });
 
@@ -467,10 +465,10 @@ class Pawn extends Pion {
     super(color, x, y);
     if (color == "white")
       this.src =
-        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhitePawn.png";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/WhitePawn.png";
     else
       this.src =
-        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackPawn.png";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/BlackPawn.png";
     this.firstMove = true;
     this.type = "Pawn";
     this.evolve = false;
@@ -526,7 +524,7 @@ class Pawn extends Pion {
             <option value = "Queen">Queen</option>\
             <option value = "Rook">Rook</option>\
           </select>\
-          <button type = "submit">Valider le nouveau type</button>\
+          <button id = "buttonEvolve" type = "submit">Valider le nouveau type</button>\
         </form>';
       document.getElementById('indication').innerHTML = formulaire;
       let form = document.getElementById('evolve');
@@ -547,10 +545,10 @@ class Bishop extends Pion {
     super(color, x, y);
     if (color == "white")
       this.src =
-        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteBishop.png";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/WhiteBishop.png";
     else
       this.src =
-        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackBishop.png";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/BlackBishop.png";
     this.type = "Bishop";
   }
 
@@ -611,10 +609,10 @@ class Rook extends Pion {
     super(color, x, y);
     if (color == "white")
       this.src =
-        "https://cdn.glitch.com/fff49e0e-ad22-4de8-8576-bee7f4fc6e56%2FWhiteRook.png?v=1585100879087";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/WhiteRook.png";
     else
       this.src =
-        "https://cdn.glitch.com/fff49e0e-ad22-4de8-8576-bee7f4fc6e56%2FBlackRook.png?v=1585100875416";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/BlackRook.png";
     this.type = "Rook";
   }
 
@@ -672,10 +670,10 @@ class Knight extends Pion {
     super(color, x, y);
     if (color == "white")
       this.src =
-        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteKnight.png";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/WhiteKnight.png";
     else
       this.src =
-        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackKnight.png";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/BlackKnight.png";
     this.type = "Knight";
   }
 
@@ -710,10 +708,10 @@ class Queen extends Pion {
     super(color, x, y);
     if (color == "white")
       this.src =
-        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/WhiteQueen.png";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/WhiteQueen.png";
     else
       this.src =
-        "https://raw.githubusercontent.com/Europale98/Chess/master/ImagesPieces/BlackQueen.png";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/BlackQueen.png";
     this.type = "Queen";
   }
 
@@ -815,9 +813,9 @@ class King extends Pion {
     super(color, x, y);
     if (color == "white")
       this.src =
-        "https://cdn.glitch.com/fff49e0e-ad22-4de8-8576-bee7f4fc6e56%2FWhiteKing.png?v=1585164539251";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/WhiteKing.png";
     else this.src =
-        "https://cdn.glitch.com/fff49e0e-ad22-4de8-8576-bee7f4fc6e56%2FBlackKing.png?v=1585164538308";
+        "https://raw.githubusercontent.com/Seiro09/Chess/ImagesPieces/FinalPieces/BlackKing.png";
     this.type = "King";
   }
 

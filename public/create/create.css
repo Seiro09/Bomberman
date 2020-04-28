@@ -1,28 +1,139 @@
 #body {
-  background-image: url('https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784');
-  background-repeat: no-repeat;
+  background-image: url(https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
-  font-size : 30px;
-  padding-top : 10%;
+  font-size: 30px;
+  font-family: Gill Sans, sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-button, input {
-  font-size : 25px;
+input[id="afficheCode"] {
+  font-size : 20px;
   border-style : solid;
   background-color : white;
+  width: 90%;
   border-radius: 10px;
+  margin: auto;
 }
 
 #banniereTable {
-  border-style : outset;
-  border-radius: 30px;
-  margin : auto;
-  width : 60%;
-  overflow : auto;
-  background-color : grey;
+  margin: 0 auto;
+  font-family: Tahoma, Geneva, sans-serif;
+  background: white;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 2px 20px 20px 20px;
+  width: 400px;
+  box-shadow: 10px 10px 5px grey;
+  border: 1px solid grey;
 }
 
-p {
-  text-align : center;
-  font-family : Gill Sans, sans-serif;
+#afficheCode {
+  border: 2px solid black;
+  padding: 2px 15px 2px 15px;
 }
+
+.create button[id="aleatoire"]{
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 100%;
+  padding: 15px;
+  background-color: black;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.create button[id="codeSalon"]{
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 100%;
+  padding: 15px;
+  background-color: black;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.create button[id="launch"]{
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 100%;
+  padding: 15px;
+  background-color: black;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.create button[id="retourAccueil"]{
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 100%;
+  padding: 15px;
+  background-color: black;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 20px 0px 0px 0px;
+}
+
+.create button[type="submit"]:hover {
+  background-color: grey;
+}
+
+.create h1 {
+  background-size: 100%;
+  background-color: white;
+  border-style: solid;
+  border-color: white;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  text-align: center;
+  color: black;
+  font-size: 30px;
+  padding: 20px 0 20px 0;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  font-weight: bold;
+}
+
+hr {
+    display: block; 
+    border: 0;
+    border-top: 2px solid grey;
+    margin: 5px ;
+    padding: 0;
+}
+
+ p[id="row1"] {
+  text-align : center;
+  font-family :  Brush Script MT;
+  font-weight: bold;
+  font-size: 35px;
+}
+
+p[id="row2"] {
+  text-align : center;
+  font-family : Tahoma, Geneva, sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+

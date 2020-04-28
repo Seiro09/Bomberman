@@ -1,4 +1,5 @@
-let form = document.getElementById('form');
+let form = document.getElementById("banniereProfil");
+let form2 = document.getElementById("banniereTable");
 
 //initialisation du socket
 var socket = io.connect();
@@ -44,7 +45,7 @@ function addEvent(){
   let profil = document.getElementById('profil');
   
   //le formulaire est validé
-  form.addEventListener('submit', function(e){
+  form2.addEventListener('submit', function(e){
     
     //l'utilisateur clique sur rejoindre, on lui demande le code du salon
     if(choix == 'join'){
@@ -57,14 +58,8 @@ function addEvent(){
     
     //l'utilisateur décide de créer un salon, il est redirigé vers la page de création
     if(choix == 'create'){
-      form.action = '/create';
-      form.submit();
-    }
-    
-    //le client souhaite voir son profil, il est redirigé vers la page de profil
-    if(choix == 'profil'){
-      form.action = '/profil';
-      form.submit();
+      form2.action = '/create';
+      form2.submit();
     }
     
     //rejoint la file d'attente, le niveau voulu est indiqué dans le formulaire
@@ -72,14 +67,29 @@ function addEvent(){
       let select = document.getElementById('level-select');
       let choice = select.selectedIndex;
       let level = select.options[choice].value;
-      form.action = '/attente/' + level;
-      form.submit();
+      form2.action = '/attente/' + level;
+      form2.submit();
+    }
+    //le joueur souhaite lire les règles du jeu
+    if (choix == "regles") {
+      form2.action = "/regles";
+      form2.submit();
     }
     
-    //le joueur veut se déconnecter, les valeurs de sessions sont retirés
-    if(choix == 'disconnect') {
+    e.preventDefault(); //ne pas quitter la page
+  });
+  
+  form.addEventListener("submit", function(e) {
+    
+     //le client souhaite voir son profil, il est redirigé vers la page de profil
+    if(choix == 'profil'){
+      form.action = '/profil';
+      form.submit();
+    }
+   //le joueur veut se déconnecter, les valeurs de sessions sont retirés
+    if (choix == "disconnect") {
       sessionStorage.clear();
-      form.action = '/login';
+      form.action = "/login";
       form.submit();
     }
     
@@ -156,4 +166,10 @@ socket.on('reponseInvitation', function(message){
     form.action = '/salon/' + infos.code;
     form.submit();
   }
+});
+
+$(document).ready(function(){
+  $('#dropDown').click(function(){
+    $('.drop-down').toggleClass('drop-down--active');
+  });
 });

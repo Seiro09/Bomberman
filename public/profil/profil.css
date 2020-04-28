@@ -1,61 +1,249 @@
 #body {
-  background-image: url('https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784');
-  background-repeat: no-repeat;
+  background-image: url(https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
-  font-size : 30px;
-  padding-top : 10%;
+  font-size: 30px;
+  font-family: Gill Sans, sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-button, input {
-  font-size : 25px;
-  border-style : solid;
-  background-color : white;
-  border-radius: 10px;
+@media all and (orientation: landscape) {
+  .profile-form {
+    margin: 0 auto;
+    font-family: Tahoma, Geneva, sans-serif;
+    background: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 20px 20px 20px;
+    width: 500px;
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+  }
+
+  #rechercher {
+    /* background-size: 100%;
+  background-image: url("https://cdn.glitch.com/139185a8-2845-442f-9b69-25bf7b642875%2Floupe.png?v=1587919373754");
+  color: white;*/
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 11px 30px;
+    background-color: black;
+    fill: white;
+    border-color: white;
+    float: right;
+    box-sizing: border-box;
+    border: 2px solid black;
+  }
+
+  #amis {
+    border: 1px solid grey;
+    width: 500px;
+    background-color: black;
+  }
+
+  #amis td {
+    font-size: 14px;
+    background-color: white;
+    text-align: center;
+  }
+
+  #amis thead {
+    font-size: 14px;
+    color: white;
+    background-color: grey;
+  }
+
+  #amis th:nth-child(odd) {
+    color: #ffffff;
+    background: black;
+  }
+
+  .suppB {
+    font-weight: bold;
+    text-align: center;
+    padding: 15px 37px;
+    background-color: black;
+    border-color: white;
+    color: white;
+    background-image: url("https://cdn.glitch.com/b4544041-a4c4-4f79-a5ed-ea7fd0c85532%2Fclose.png?v=1588086097561");
+    background-size: 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .invite {
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 18px;
+    background-color: black;
+    border-color: white;
+    color: white;
+  }
 }
 
-#box {
-  border-style : outset;
-  border-radius: 30px;
-  margin : auto;
-  width : 60%;
-  overflow : auto;
-  background-color : grey;
+@media all and (orientation: portrait) {
+  .profile-form {
+    margin: 0 auto;
+    font-family: Tahoma, Geneva, sans-serif;
+    background: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 20px 20px 20px;
+    width: 80%;
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+  }
+
+  #rechercher {
+    /* background-size: 100%;
+  background-image: url("https://cdn.glitch.com/139185a8-2845-442f-9b69-25bf7b642875%2Floupe.png?v=1587919373754");
+  color: white;*/
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 11px 5%;
+    background-color: black;
+    fill: white;
+    border-color: white;
+    float: right;
+    box-sizing: border-box;
+    border: 2px solid black;
+  }
+
+  #amis {
+    width: 100%;
+    background-color: black;
+  }
+
+  #amis td {
+    font-size: 25%;
+    background-color: white;
+    text-align: center;
+  }
+
+  #amis thead {
+    font-size: 25%;
+    color: white;
+    background-color: grey;
+  }
+
+  #amis th:nth-child(odd) {
+    color: #ffffff;
+    background: black;
+  }
+
+  .suppB {
+    font-weight: bold;
+    text-align: center;
+    padding: 13px 45%;
+    background-color: black;
+    border-color: white;
+    color: white;
+    background-image: url("https://cdn.glitch.com/b4544041-a4c4-4f79-a5ed-ea7fd0c85532%2Fclose.png?v=1588086097561");
+    background-size: 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .invite {
+    font-weight: bold;
+    text-align: center;
+    padding: 6px 12%;
+    background-color: black;
+    border-color: white;
+    color: white;
+  }
 }
 
-p, th, td {
-  text-align : center;
-  font-family : Gill Sans, sans-serif;
+.profile-form p[id="infoSession"] {
+  font-size: 38px;
+  text-align: center;
+  font-weight: bold;
+  font-family: Brush Script MT;
+  margin: 5px 0px;
 }
 
-#amis {
-  border: 1px solid grey;
+.profile-form p[id="infoMatch"] {
+  font-size: 25px;
+  text-align: center;
+  font-family: Brush Script MT;
+  margin: 0px;
 }
 
-#amis {
-  background-color : #aaaaaa;
+.profile-form label {
+  font-size: 20px;
+  text-align: center;
 }
 
-#amis th, #amis td {
-  font-size : 24px;
-  border: 0px solid grey;
-  background-color : white;
+.profile-form input[type="text"] {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 80%;
+  padding: 15px;
+  border: 2px solid black;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  float: left;
+  color: black;
 }
 
-#rechercher {
-	background-size : 100%;
-	background-image : url("https://cdn.glitch.com/139185a8-2845-442f-9b69-25bf7b642875%2Floupe.png?v=1587919373754");
-	color : white;
+.profile-form button {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.profile-form button[id="actualiser"],
+.profile-form button[id="retour"] {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 100%;
+  padding: 15px;
+  background-color: black;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.profile-form button:hover {
+  background-color: grey;
+}
+
+#rechercher:hover {
+  background-color: grey;
+  border: 2px solid grey;
 }
 
 .amiConnecte {
-  color : green;
+  color: green;
+  background-image: url("https://cdn.glitch.com/b4544041-a4c4-4f79-a5ed-ea7fd0c85532%2Fsmile.png?v=1588085203709");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .amiDeconnecte {
-  color : red;
+  color: red;
+  background-image: url("https://cdn.glitch.com/b4544041-a4c4-4f79-a5ed-ea7fd0c85532%2Fsleeping.png?v=1588085200967");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.suppB {
-  font-weight: bold;
-  color : red;
+table {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  table-layout: fixed;
+  width: 100%;
 }

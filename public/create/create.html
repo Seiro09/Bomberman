@@ -2,28 +2,42 @@
 <html lang="fr">
   <head>
     <title>Chess</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/create/create.css">
-  </head>  
-  <body id = "body">
-    <section id = "accueil">
-      <form id = "banniereTable">
-        <p id = "row0">
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/create/create.css" />
+  </head>
+  <body id="body">
+    <div class="create">
+    <section id="accueil">
+      <form id="banniereTable">
+        <p id="row0"></p>
+        <p id="row1">
+          Code du salon actuel :
+          <input type="text" id="afficheCode" value="" readonly />
+        </p>
+        <hr>
+        <p id="row2">
+          <button type="submit" id="aleatoire">
+            Générer un code de salon aléatoire
+          </button>
+          Ou
+          <button type="submit" id="codeSalon">
+            Choisir un code personnalisé
+          </button>
+        </p>
+        <hr>
+        <p id="row3">
+          <button type="submit" id="launch">Ouvrir le salon</button>
+      <hr>
+          <button type="submit" id="retourAccueil">
+            Retour à la page d'accueil
           
-        </p>
-        <p id = "row1">
-          Code du salon actuel : <input type = "text" id = "afficheCode" value = "" readonly/>
-        </p>
-        <p id = "row2">
-          <button type = "submit" id = "aleatoire">Générer un code de salon aléatoire</button> Ou 
-          <button type = "submit" id = "codeSalon">Choisir un code personnalisé</button>
-        </p>
-        <p id = "row3">
-          <button type = "submit" id = "retourAccueil">Retour à la page d'accueil</button> <button type = "submit" id = "launch">Ouvrir le salon</button>
+          </button>
+          
         </p>
       </form>
     </section>
-    <script type = "text/javascript" src = "/socket.io/socket.io.js"></script>
-    <script type = "text/javascript" src = "/create/create.js"></script>
+      </div>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/create/create.js"></script>
   </body>
 </html>
