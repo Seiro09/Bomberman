@@ -1,31 +1,63 @@
+//variable pour redimensionner le plateau en fonction de la taille de la fenêtre
 var width;
 var height;
 var squareSize;
 window.addEventListener("resize", resize);
-var nombreCases = 8;
+
+var nombreCases = 8;//dimensions du plateau
 var colorPlayer; //indique si le joueur joue les pions blancs ou noirs
 var jouer; //indique si le joueur peut jouer
 
-//tableau de pions
+//tableau de pions, contient la liste des pions présent sur le plateau
 var pions = undefined;
 
-var KingJoueur;
+var KingJoueur; //contient le roi du joueur courant (aussi présent dans le plateau)
+var KingAdverse; //contient le roi du joueur adverse (aussi présent dans le plateau)
 
-//echec au roi pour le joueur courant
-var echec = false;
-
+//initialisation du socket
 var socket = io.connect();
+
+//vérifie que le joueur est connecté, dans ce cas il transmet les informations de connexion
+//sinon un message s'affiche lui indiquant de se connecter
+//et un lien de redirection est indiqué pour se connecter
+if(sessionStorage.getItem('username') != undefined) {
+  var message = {
+    "username" : sessionStorage.getItem('username'),
+    "mdp" : sessionStorage.getItem('mdp')
+  };
+  setTimeout(function(){
+    socket.emit('login', JSON.stringify(message));
+  },1000);
+}
+else {
+  document.getElementById('indication').innerHTML = 'Vous devez être connecté pour jouer. Cliquez <a href = "/login">ici</a> pour vous connecter.';
+}
+
+//reception de la réponse de connexion du server et traitement
+//si les informations de connexions sont invalides le client est invité à se connecter
+//dans le cas contraire, un message demandant la couleur qui lui sera attribué pour jouer est envoyé au server
+socket.on('login', function(message){
+  if(message != 'true'){
+    sessionStorage.clear();
+    document.getElementById('indication').innerHTML = 'Vous devez être connecté pour jouer. Cliquez <a href = "/login">ici</a> pour vous connecter.';
+  }
+  else {
+    //demande la couleur qui lui sera attribué pour jouer
+    socket.emit('askColor', getCodeSalon());
+  }
+});
+
 
 //récupérer le code du salon avec l'url
 function getCodeSalon(){
   let url = document.location.href;
   let split = url.split('salon/');
+  if(split[1] == undefined || sessionStorage.getItem('pseudo') == undefined) {
+    document.getElementById('indication').innerHTML = 'Une erreur est survenu. Cliquez <a href = "/accueil">ici</a> pour revenir sur la page d\'accueil.';
+  }
   let split2 = split[1].split('?');
   return split2[0];
 }
-
-//demande la couleur qui lui sera attribué pour jouer
-socket.emit('askColor', getCodeSalon());
 
 //reçoit une reponse du serveur pour la couleur
 socket.on('giveColor', function(message){
@@ -35,7 +67,7 @@ socket.on('giveColor', function(message){
     let plateau = document.getElementById('plateau');
     let p = document.createElement('p');
     plateau.appendChild(p);
-    p.innerHTML = 'Ce salon est complet. Cliquez <a href = "/">ici</a> pour revenir sur la page d\'accueil.';
+    p.innerHTML = 'Ce salon est complet. Cliquez <a href = "/accueil">ici</a> pour revenir sur la page d\'accueil.';
   }
   else {
     plateauEchec(); //dessine le plateau
@@ -47,37 +79,50 @@ socket.on('giveColor', function(message){
       //le joueur noir préviens le serveur que le blanc peut commencer à jouer
       socket.emit('ready', getCodeSalon());
       console.log('ready');
+      document.getElementById('indication').innerHTML = "C'est au tour de l'adversaire";
     }
   }
 });
 
-//seul le joueur blanc reçoit ce message, lui permettant de commencer à jouer car le joueur noir est prêt
+//après que le joueur noir ait envoyé 'ready' au server,
+//le server indique au joueur blanc qu'il peut commencer à joueur
 socket.on('ready', function(message){
   console.log('receive ready');
   jouer = true;
   document.getElementById('indication').innerHTML = 'A vous de jouer';
 });
 
-//le serveur émet stop car un joueur est parti donc le salon est fermé
+//le serveur émet stop car un joueur est parti donc le salon est fermé par le serveur
 socket.on('stop', function(message){
   console.log('stop');
   let plateau = document.getElementById('plateau');
     let p = document.createElement('p');
     plateau.innerHTML = '';
     plateau.appendChild(p);
-    p.innerHTML = 'Votre adversaire a quitté, le salon a donc été fermé. Cliquez <a href = "/">ici</a> pour revenir sur la page d\'accueil.';
+    p.innerHTML = 'Votre adversaire a quitté, le salon a donc été fermé. Cliquez <a href = "/accueil">ici</a> pour revenir sur la page d\'accueil.';
 });
 
-socket.on('fin', function(message){
+//le joueur adverse a perdu et a transmit 'fin' au serveur qui transmet à son tour au joueur courant qu'il a gagné
+socket.on('fin', function(message) {
+  var data = {
+    "username" : sessionStorage.getItem("username"),
+    "mdp" : sessionStorage.getItem("mdp"),
+    "resultat" : 1
+  };
+  socket.emit("ajoutResultat", JSON.stringify(data));
   alert('Vous avez gagné !')
-  document.getElementById('indication').innerHTML = '<a href = "/">Retourner à l\'accueil</a>';
+  document.getElementById('indication').innerHTML = '<a href = "/accueil">Retourner à l\'accueil</a>';
+});
+
+//le salon n'existe pas, le serveur a donc indiqué au client de revenir au menu
+socket.on('redirectError', function(message){
+  document.getElementById('indication').innerHTML = 'Ce salon n\'existe pas. Cliquez <a href = "/accueil">ici</a> pour revenir sur la page d\'accueil.';
 });
 
 /**
 * classe représentant une position sur un plan 2D (x,y)
 */
 class Position2D {
-  
   /**
   * affecte les valeurs x et y aux coordonnées du points.
   * dans le cas ou les valeurs ne sont pas données, la valeur sera affectée par défaut
@@ -115,15 +160,15 @@ class Pion {
   //construit le pion
   constructor(color,x,y) {
     this.position = new Position2D(x,y);
-    this.src = "https://cdn.glitch.com/cc360787-9153-4d34-a2e2-ddbd9bc2b9e4%2FBlackPawn.png?v=1583876671281";
+    this.src = "";
     this.color = color;
     this.type = 'pion';
-    this.fakePosition = new Position2D(x,y);
-    this.placementsPossibles = [];
+    this.fakePosition = new Position2D(x,y); //position factice (pour des tests futurs)
+    this.placementsPossibles = []; //liste des placements possibles du pion
   }
   
   /*
-  * place le pion sur le plateau en ajoutant la photo du pion associé à l'instance du pion
+  * la photo du pion est ajouté dans la balise <td> du plateau associé à sa position
   */
   affiche(){
     let td = this.getCase();
@@ -133,7 +178,6 @@ class Pion {
     piece.width = squareSize;
     piece.height = squareSize;
     piece.id = "_img" + this.position.x + this.position.y;
-    //piece.style.margin = '' + tailleCase/4 + 'px ' + tailleCase/4 + 'px';
   }
   
   //return la case <td> associé au pion
@@ -164,6 +208,9 @@ class Pion {
     }
   }
   
+  //teste si un pion adverse peut manger le pion actuel
+  //utilise les positions factices pour anticiper des déplacements futurs (vérifier un échec et math)
+  //retourne true si le pion peut être mangé et false sinon
   isEdible(){
     let td;
     var verif;
@@ -181,7 +228,10 @@ class Pion {
     i = getFakePion(x - 1, y);
     if(i != undefined){
       if(pions[i].color != this.color){
-        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') return true;
+        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
       }
     }
     
@@ -196,7 +246,10 @@ class Pion {
     i = getFakePion(x + 1, y);
     if(i != undefined){
       if(pions[i].color != this.color){
-        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') return true;
+        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
       }
     }
     
@@ -211,7 +264,10 @@ class Pion {
     i = getFakePion(x, y + 1);
     if(i != undefined){
       if(pions[i].color != this.color){
-        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') return true;
+        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
       }
     }
     
@@ -226,7 +282,10 @@ class Pion {
     i = getFakePion(x, y - 1);
     if(i != undefined){
       if(pions[i].color != this.color){
-        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') return true;
+        if(pions[i].type == 'Rook' || pions[i].type == 'Queen') {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
       }
     }
     
@@ -243,9 +302,10 @@ class Pion {
     i = getFakePion(x - 1, y - 1);
     if(i != undefined){
       if(pions[i].color != this.color){
-        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') return true;
-        let distance = abs(pions[i].fakePosition.x - this.fakePosition.x) + abs(pions[i].fakePosition.y - this.fakePosition.y);
-        if(pions[i].type == 'Pawn' && distance == 2) return true;
+        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
       }
     }
     
@@ -261,9 +321,15 @@ class Pion {
     i = getFakePion(x + 1, y + 1);
     if(i != undefined){
       if(pions[i].color != this.color){
-        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') return true;
+        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
         let distance = abs(pions[i].fakePosition.x - this.fakePosition.x) + abs(pions[i].fakePosition.y - this.fakePosition.y);
-        if(pions[i].type == 'Pawn' && distance == 2) return true;
+        if(pions[i].type == 'Pawn' && distance == 2) {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
       }
     }
     
@@ -279,9 +345,15 @@ class Pion {
     i = getFakePion(x - 1, y + 1);
     if(i != undefined){
       if(pions[i].color != this.color){
-        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') return true;
+        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
         let distance = abs(pions[i].fakePosition.x - this.fakePosition.x) + abs(pions[i].fakePosition.y - this.fakePosition.y);
-        if(pions[i].type == 'Pawn' && distance == 2) return true;
+        if(pions[i].type == 'Pawn' && distance == 2) {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
       }
     }
     
@@ -297,9 +369,10 @@ class Pion {
     i = getFakePion(x + 1, y - 1);
     if(i != undefined){
       if(pions[i].color != this.color){
-        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') return true;
-        let distance = abs(pions[i].fakePosition.x - this.fakePosition.x) + abs(pions[i].fakePosition.y - this.fakePosition.y);
-        if(pions[i].type == 'Pawn' && distance == 2) return true;
+        if(pions[i].type == 'Bishop' || pions[i].type == 'Queen') {
+          console.log(pions[i].type + " : " + pions[i].fakePosition.log());
+          return true;
+        }
       }
     }
     
@@ -315,6 +388,10 @@ class Pion {
     i = getFakePion(x - 2, y + 1); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
     i = getFakePion(x - 1, y + 2); if(i != undefined) if(pions[i].type == 'Knight' && pions[i].color != this.color) return true;
     
+    //si les rois sont proches l'un de l'autre
+    if(abs(KingAdverse.fakePosition.x - x) + abs(KingAdverse.fakePosition.y - y) == 1) return true;
+    if(abs(KingAdverse.fakePosition.x - x) == 1 && abs(KingAdverse.fakePosition.y - y) == 1) return true;
+    
     return false;
   }
   
@@ -327,8 +404,7 @@ class Pion {
   
   /*
   * sélectionne les cases qui respectent les règles de déplacement du pion
-  * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
-  * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
+  * sélectionne certaines cases et les ajoutent à la liste des placements possibles
   */
   selectNewCase(){
     this.placementsPossibles = [];
@@ -362,10 +438,26 @@ class Pion {
     }
   }
   
+  //modifie la classe des balises <td> pour afficher les cases accessibles au pion sélectionné par le client
   editNewCases(){
     for(let i = 0; i < this.placementsPossibles.length; i++){
       setCaseSelectionnable(this.placementsPossibles[i],this);
     }
+  }
+  
+  //récupérer la position du pion
+  getPosition() {
+    return this.position;
+  }
+  
+  //récupérer la couleur
+  getColor() {
+    return this.color;
+  }
+  
+  //récupérer le type du pion
+  getType() {
+    return this.type;
   }
 }
 
@@ -383,58 +475,42 @@ class Pawn extends Pion {
     this.type = "Pawn";
     this.evolve = false;
   }
-
+  
+  //2 cases devant lui si c'est son premier déplacement
+  //une case devant lui pour le reste de ses déplacements
+  //ne peut manger qu'en diagonale devant lui à une distance de 1
   selectNewCase() {
     let td;
     this.placementsPossibles = [];
-    td = document.getElementById(
-      "Case" + this.position.x + (this.position.y - 1)
-    );
+    td = document.getElementById("Case" + this.position.x + (this.position.y - 1));
+    
     if (getPion(this.position.x, this.position.y - 1) == undefined)
       //case devant lui
       this.placementsPossibles.push(td);
 
-    if (
-      this.firstMove == true &&
-      getPion(this.position.x, this.position.y - 1) == undefined
-    ) {
+    if (this.firstMove == true && getPion(this.position.x, this.position.y - 1) == undefined
+       && getPion(this.position.x, this.position.y - 2) == undefined) {
       //deuxieme case devant lui
-      td = document.getElementById(
-        "Case" + this.position.x + (this.position.y - 2)
-      );
+      td = document.getElementById("Case" + this.position.x + (this.position.y - 2));
       this.placementsPossibles.push(td);
     }
 
-    if (getPion(this.position.x - 1, this.position.y + 1) != undefined) {
-      // pion en bas a gauche
-      td = document.getElementById(
-        "Case" + (this.position.x - 1) + (this.position.y + 1)
-      );
+    if (getPion(this.position.x - 1, this.position.y - 1) != undefined) {
+      // pion en haut a gauche
+      td = document.getElementById("Case" + (this.position.x - 1) + (this.position.y - 1));
       this.placementsPossibles.push(td);
     }
     if (getPion(this.position.x + 1, this.position.y - 1) != undefined) {
       //pion en haut a droite
-      td = document.getElementById(
-        "Case" + (this.position.x + 1) + (this.position.y - 1)
-      );
-      this.placementsPossibles.push(td);
-    }
-    if (getPion(this.position.x - 1, this.position.y - 1) != undefined) {
-      //pion en haut a gauche
-      td = document.getElementById(
-        "Case" + (this.position.x - 1) + (this.position.y - 1)
-      );
-      this.placementsPossibles.push(td);
-    }
-    if (getPion(this.position.x + 1, this.position.y + 1) != undefined) {
-      //pion en bas a droite
-      td = document.getElementById(
-        "Case" + (this.position.x + 1) + (this.position.y + 1)
-      );
+      td = document.getElementById("Case" + (this.position.x + 1) + (this.position.y - 1));
       this.placementsPossibles.push(td);
     }
   }
-
+  
+  //déplace le pion. si le pion atteint le haut du plateau,
+  //il peut choisir parmi les 4 pièces (cavalier, fou, tour ou reine) et être promu.
+  //il est donc remplacé par le type de pion choisit
+  //un formumaire pour choisir le type est ajouté dans la page web
   move(x, y) {
     let me = this;
     super.move(x, y);
@@ -478,6 +554,7 @@ class Bishop extends Pion {
     this.type = "Bishop";
   }
 
+  //déplacement en diagonale
   selectNewCase(){
     this.placementsPossibles = [];
     let td;
@@ -527,7 +604,7 @@ class Bishop extends Pion {
   }
 }
 
-//classe pour le pion Bishop
+//classe pour le pion Rook
 class Rook extends Pion {
   //construit le pion
   constructor(color, x, y) {
@@ -541,6 +618,7 @@ class Rook extends Pion {
     this.type = "Rook";
   }
 
+  //déplacements en ligne droite
   selectNewCase() {
     this.placementsPossibles = [];
     let td;
@@ -601,11 +679,7 @@ class Knight extends Pion {
     this.type = "Knight";
   }
 
-  /*
-   * sélectionne les cases qui respectent les règles de déplacement du pion
-   * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
-   * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
-   */
+  //déplacement en L du pion sur les 8 positions possibles
   selectNewCase() {
     this.placementsPossibles = [];
     let td;
@@ -630,7 +704,6 @@ class Knight extends Pion {
 }
 
 //classe pour le pion Queen
-
 class Queen extends Pion {
   //construit le pion
   constructor(color, x, y) {
@@ -644,11 +717,7 @@ class Queen extends Pion {
     this.type = "Queen";
   }
 
-  /*
-   * sélectionne les cases qui respectent les règles de déplacement du pion
-   * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
-   * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
-   */
+  //déplacements en diagonale et en ligne droite
   selectNewCase() {
     this.placementsPossibles = [];
     let td;
@@ -752,11 +821,7 @@ class King extends Pion {
     this.type = "King";
   }
 
-  /*
-   * sélectionne les cases qui respectent les règles de déplacement du pion
-   * sélectionne certaines cases et les modifie pour qu'elles soient accessibles au pion
-   * se référer à la doc de "setCaseSelectionnable()" qui rend une case accessible au pion
-   */
+  //déplacement autour de lui à une distance de 1 en diagonale et en ligne droite
   selectNewCase() {
     this.placementsPossibles = [];
     let td;
@@ -816,13 +881,13 @@ function initPions(){
   if(colorPlayer == 'white'){
     pions.push(new Queen(autrePion, 3, 0),
     new Queen(colorPlayer, 3, 7),
-    new King(autrePion, 4, 0),
+    KingAdverse = new King(autrePion, 4, 0),
     KingJoueur = new King(colorPlayer, 4, 7));
   }
   else {
     pions.push(new Queen(autrePion, 4, 0),
     new Queen(colorPlayer, 4, 7),
-    new King(autrePion, 3, 0),
+    KingAdverse = new King(autrePion, 3, 0),
     KingJoueur = new King(colorPlayer, 3, 7));
   }
 }
@@ -835,6 +900,9 @@ function refreshPions(){
       if(pions[i] != undefined){
         pions[i].delete();
         pions[i].affiche();
+      }
+      else {
+        pions.splice(i,1);
       }
     }
   }
@@ -966,7 +1034,7 @@ var indice; //indice dans le plateau du pion à déplacer
 var source = undefined; //position de départ du pion, indique si un pion est sélectionnée pour le déplacer
 var destination = undefined; //position d'arrivée du pion
 
-//ecoute le tableau, si une case est cliquée différents états du plateau modifient les variables pour l'évènement 
+//ecoute le tableau, si une case est cliquée, différents états du plateau modifient les variables pour l'évènement 
 function eventTableEchec(event){
   let x = parseInt(event.target.id.charAt(4));
   let y = parseInt(event.target.id.charAt(5));
@@ -989,21 +1057,36 @@ function eventTableEchec(event){
       resetAllCases();
     }
     else { //la case n'est pas la position source
+      for(let i = 0; i < pions.length; i++){ //réinitialise les positions factices
+        if(pions[i] != undefined) {
+          pions[i].fakePosition.setP(pions[i].position);
+        }
+      }
+      //simule le déplacement pour vérifier si le roi n'est pas en échec
       pions[indice].fakePosition.set(x,y);
+      let k = getPion(x,y);
+      if(k != undefined) {
+        pions[k].fakePosition.set(-10,-10);
+      }
+      //si le roi peut être mangé le déplacement est refusé et le client reçoit l'alerte
       if(KingJoueur.isEdible() == true) {
         alert('Placement impossible, votre roi serait en Echec');
         pions[indice].fakePosition.setP(pions[indice].position);
+        if(k != undefined) pions[k].fakePosition.setP(pions[k].position);
       }
-      else if(event.target.className == 'selectCase'){ //la case est accessible par le pion
+      else if(event.target.className == 'selectCase'){ //la case est accessible par le pion et vide
         pions[indice].move(x,y);
         resetAllCases();
         destination = new Position2D(x,y);
         jouer = false;
         if(!(pions[indice].type == 'Pawn' && y == 0)) document.getElementById('indication').innerHTML = "C'est au tour de l'adversaire";
+        else {
+          pions[indice] = undefined;
+        }
         socket.emit('deplacement', source.x + ',' + source.y + ',' + destination.x + ',' + destination.y); //transfert des positions relatives au déplacement du pion au serveur
         source = undefined;
       }
-      else if(event.target.id == '_img' + x + y && document.getElementById('Case' + x + y).className == 'selectCollision'){ //la case contient un autre pion
+      else if(event.target.id == '_img' + x + y && document.getElementById('Case' + x + y).className == 'selectCollision'){ //la case contient un pion ennemi
         let j = getPion(x,y);
         if(j != undefined) {
           pions[j].delete(); //le pion est retirée de l'affichage
@@ -1014,9 +1097,13 @@ function eventTableEchec(event){
         destination = new Position2D(x,y);
         jouer = false;
         if(!(pions[indice].type == 'Pawn' && y == 0)) document.getElementById('indication').innerHTML = "C'est au tour de l'adversaire";
+        else {
+          pions[indice] = undefined;
+        }
         socket.emit('deplacement', source.x + ',' + source.y + ',' + destination.x + ',' + destination.y); //transfert des positions relatives au déplacement du pion au serveur
         source = undefined;
       }
+      refreshPions();
     }
   }
 }
@@ -1034,9 +1121,9 @@ socket.on('deplacement', function(message){
   if(j != undefined){ //l'adversaire mange un pion
     if(pions[j].color == colorPlayer){
       pions[j].delete();
-      pions[j] = undefined;
+      pions[j] = undefined; 
+      pions[i].move(destination.x, destination.y);
     }
-    pions[i].move(destination.x, destination.y);
   }
   else { //déplacement sur une case vide
     pions[i].move(destination.x, destination.y);
@@ -1045,25 +1132,44 @@ socket.on('deplacement', function(message){
   if(!(pions[i].type == 'Pawn' && pions[i].position.y == 7)) {
     jouer = true;
     document.getElementById('indication').innerHTML = 'A vous de jouer';
-  
+    for(let i = 0; i < pions.length; i++){
+      if(pions[i] != undefined) {
+        pions[i].fakePosition.setP(pions[i].position);
+      }
+    }
+    //après le déplacement on vérifie si le roi est en échec
+    //si c'est le cas on regarde s'il est en échec et mat
     if(KingJoueur.isEdible() == true){
       if(EchecEtMath() == true) {
+        var data = {
+          "username" : sessionStorage.getItem("username"),
+          "mdp" : sessionStorage.getItem("mdp"),
+          "resultat" : -1
+        };
+        socket.emit("ajoutResultat", JSON.stringify(data)); //envoi des mises à jours des résultats dans la base de donnée
         alert('Echec et Math ! Vous avez perdu');
+        //indication au serveur de la fin de partie, il transmettra au gagnant qu'il a gagné, et ajoutera sa victoire à la base de donnée
         socket.emit('fin', '');
-        document.getElementById('indication').innerHTML = '<a href = "/">Retourner à l\'accueil</a>';
+        document.getElementById('indication').innerHTML = '<a href = "/accueil">Retourner à l\'accueil</a>';
       }
       else alert("Echec !");
     }
   }
+  refreshPions();
+  //Envoie au server la disposition actuel des pions de l'utilisateur
+  //retiré du projet en raison de problèmes non résolus de la vérification
+  //socket.emit('check', StringPositionsPions());
 });
 
+//le joueur adverse a fait promouvoir un pion
+//le pion est retirée du plateau et le nouveau pion est ajoutée au plateau
+//le statut échec au roi (implique la vérification Echec et mat) est vérifié à nouveau 
 socket.on('evolve', function(type){
-  for(let i = 0; i < pions.length; i++){
+  for(let i = 0; i < pions.length; i++){ //recherche du pion
     if(pions[i] != undefined){
       if(pions[i].type == 'Pawn'){
         if(pions[i].position.y == 7){
           pions[i].delete();
-          
           let pos = pions[i].position;
           let color = pions[i].color;
           pions[i] = undefined;
@@ -1087,11 +1193,17 @@ socket.on('evolve', function(type){
   }
   document.getElementById('indication').innerHTML = 'A vous de jouer';
   jouer = true;
+  for(let i = 0; i < pions.length; i++){
+    if(pions[i] != undefined) {
+      pions[i].fakePosition.setP(pions[i].position);
+    }
+  }
+  //vérification du statut d'échec au roi avec la promotion du pion
   if(KingJoueur.isEdible() == true){
     if(EchecEtMath() == true) {
-      alert('Echec et Math ! Vous avez perdu');
       socket.emit('fin', '');
-      document.getElementById('indication').innerHTML = '<a href = "/">Retourner à l\'accueil</a>';
+      document.getElementById('indication').innerHTML = '<a href = "/accueil">Retourner à l\'accueil</a>';
+      alert('Echec et Math ! Vous avez perdu');
     }
     else alert("Echec !");
   }
@@ -1103,7 +1215,16 @@ function abs(valeur){
   return (valeur > 0)? valeur : -valeur;
 }
 
+//pour chaque déplacement possible du joueur actuel,
+//les placements possibles sont testés un par un pour vérifier s'il existe un déplacement
+//qui permet au roi de ne pas être mangé, retourne true si le roi peut se libérer du statut d'échec au roi
+//retourne false si le joueur courant a perdu
 function EchecEtMath(){
+  for(let i = 0; i < pions.length; i++){
+    if(pions[i] != undefined) {
+      pions[i].fakePosition.setP(pions[i].position);
+    }
+  }
   for(let i = 0; i < pions.length; i++){
     if(pions[i] != undefined){
       if(pions[i].color == colorPlayer){
@@ -1118,6 +1239,8 @@ function EchecEtMath(){
   return true;
 }
 
+//le joueur courant a fait promouvoir un pion
+//le pion est retirée du plateau et le nouveau pion est ajoutée au plateau
 function evolve(pawn, type){
   pawn.delete();
   let pos = pawn.position;
@@ -1141,15 +1264,46 @@ function evolve(pawn, type){
   document.getElementById('indication').innerHTML = "C'est au tour de l'adversaire";
 }
 
+//simule un certain placement possible pour un certain pion et indique si le roi est en échec
+//pour simuler la prise d'un pion, sa position factice est mis hors du plateau
 function testEdible(i,j){
   let td = pions[i].placementsPossibles[j];
   let x = parseInt(td.id.charAt(4));
   let y = parseInt(td.id.charAt(5));
   pions[i].fakePosition.set(x,y);
+  var k = getPion(x,y);
+  if(k != undefined) {
+    pions[k].fakePosition.set(-10,-10);
+    console.log("fake eat de " + pions[k].type + " " + pions[k].position.log());
+  }
   if(KingJoueur.isEdible() == false) {
     pions[i].fakePosition.setP(pions[i].position);
+    if(k != undefined) {
+      pions[k].fakePosition.setP(pions[k].position);
+    }
     return false;
   }
-  else return true;
-  pions[i].fakePosition.setP(pions[i].position);
+  else {
+    if(k != undefined) {
+      pions[k].fakePosition.setP(pions[k].position);
+    }
+    pions[i].fakePosition.setP(pions[i].position);
+    return true;
+  }
+}
+
+//retourne toutes les positions et infos des pions du joueur sous forme de string
+//utilisée pour la vérification de la disposition des pièces
+//retiré du projet en raison de problèmes non résolus de la vérification
+function StringPositionsPions(){
+  let str = "";
+  let tmp;
+  for (let i = 0; i<pions.length; i++) {
+    if(pions[i] != undefined){
+      tmp = pions[i].getPosition();
+      str += tmp.x + "/" + tmp.y + "/" + pions[i].getType() + "/" + pions[i].getColor() + ";";
+    }
+  }
+  //console.log("\n" + str);
+  return str;
 }

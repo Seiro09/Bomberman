@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>Chess : Mon compte</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/profil/profil.css">
+  </head>  
+  <body id = "body">
+    <section id = "accueil">
+      <div id = "box">
+        <p id = "infoSession"></p>
+        <center>
+          <form id = "formAmi">
+            <label>Ajouter un ami :</label>
+            <input type = "text" pattern = "([A-Za-z0-9_@])([A-Za-z0-9_@])+" title = "Entrez un pseudonyme comportant au moins 2 caractères appropriés" id = "pseudoSearch" placeholder = "Pseudonyme" value = "" required/>
+            <button type = "submit" id = "rechercher">_</button>
+          </form>
+        </center>
+        <p></p>
+        <center>
+          <button title = "Recharger votre liste d'amis" id = "actualiser">Actualiser</button>
+          <p></p>
+          <table id = "amis">
+            <tr id = "columName">
+              <th>Statut</th>
+              <th>Nom de votre ami</th>
+              <th>Victoires</th>
+              <th>Défaites</th>
+              <th>Invitation</th>
+              <th>Supprimer</th>
+            </tr>
+          </table>
+        </center>
+        <p>
+          <a href = "/accueil"><button>Retour à la page d'accueil</button></a>
+        </p>
+      </div>
+    </section>
+    <script type = "text/javascript" src = "/socket.io/socket.io.js"></script>
+    <script type = "text/javascript" src = "/profil/profil.js"></script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>Chess : File d'attente</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/attente/attente.css">
+  </head>  
+  <body id = "body">
+    <section id = "accueil">
+      <div id = "banniereTable">
+        <p id = "row1">
+          Recherche d'adversaire en cours...
+        </p>
+        <center>
+          <div class="lds-dual-ring"></div>
+        </center>
+        <p id = "row2">
+          <a href = "/accueil"><button id = "retourAccueil">Retour à la page d'accueil</button></a>
+        </p>
+        <form id = "form"></form>
+      </div>
+    </section>
+    <script type = "text/javascript" src = "/socket.io/socket.io.js"></script>
+    <script type = "text/javascript" src = "/attente/attente.js"></script>
+  </body>
+</html>

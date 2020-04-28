@@ -1,0 +1,15 @@
+#accueil {
+  width : 35%;
+  margin : auto;
+  background-color : white;
+  box-shadow: 6px 6px 6px #444;
+  border: 1px black solid;
+  padding-left : 5%;
+  padding-right : 5%;
+}
+
+#body {
+  background-image: url('https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784');
+  background-repeat: no-repeat;
+  background-size: cover;
+}

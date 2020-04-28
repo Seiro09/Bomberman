@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    <link rel="stylesheet" href="/login/login.css">
+		<title>Connexion</title>
+	</head>
+	<body>
+		<div class="login-form">
+			<h1>Connexion</h1>
+			<form id = "form">
+				<input id = "username" type="text" pattern = "([A-Za-z0-9_@])([A-Za-z0-9_@])+" title = "Caractères autorisés : lettres, chiffres, '_', '@' et au moins 2 caractères" placeholder="Entrez votre pseudonyme" required>
+				<input id = "password" type="password" placeholder="Entrez votre mot de passe" required>
+        <p id = "loginResult"></p>
+        <button id = "valider" type="submit">Valider</button>
+			</form>
+      <p></p>
+      <a href = "/registration"><button type="submit">Créer un compte</button></a>
+		</div>
+    <script type = "text/javascript" src = "/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/lib/sha256.js"></script> 
+    <script type = "text/javascript" src = "/login/login.js"></script>
+	</body>
+</html>

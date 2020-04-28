@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>Chess</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/regles/regles.css">
+  </head>  
+  <body id = "body">
+    <center><a href = "/accueil">Retour à la page d'accueil</a></center>
+    <br/>
+    <section id = "accueil">
+      <center><h1>Règles du jeu d'Echec</h1></center>
+      <div id = "regles">
+        <h4>Principe du jeu</h4>
+        <ul><p>
+          Le jeu d’échecs se joue sur un plateau qui dispose de 64 cases en alternance blanches et noires.
+          Le jeu d'échecs se joue à deux joueurs. Chaque joueur dispose initialement de 16 pièces soit 
+          blanches soit noires dont deux fous, deux cavaliers, deux tours, une dame, un roi ainsi que 8 pions.
+          <br/><br/>
+          Chaque joueur joue à tour de rôle. Par convention, le joueur ayant les pièces blanches commence.
+          <br/><br/>
+          A chaque tour, les joueurs effectuent un déplacement de l'une de leurs pièces et éventuellement 
+          de la capture d'une pièce adverse se trouvant sur la case d'arrivée de la pièce jouée. 
+          <br/><br/>
+          Le nombre de pièces des joueurs diminue donc au fur et à mesure que le jeu progresse et 
+          jusqu’à ce qu’un des joueurs soit en échec et mat. 
+          <br/><br/>
+          Un joueur est en échec et mat lorsque son roi n’arrive plus à se déplacer, 
+          ou quand aucune autre de ses pièces ne peut plus se mettre entre son roi et la pièce de l’adversaire qui l’attaque, 
+          ou quand son roi est la cible directe d’une autre pièce du joueur adverse. 
+          Un joueur peut aussi être simplement en échec quand son roi est vulnérable à une attaque de son adversaire au prochain tour. 
+          Dans ce cas, le joueur peut protéger son roi durant son tour.
+          <br/><br/>
+          L’objectif dans le jeu d’échecs est donc de capturer le roi du joueur adverse.
+          <br/>
+        </p></ul>
+        
+        <h4>Déplacement des pièces</h4>
+        <ul>
+          <p>
+            Chaque pièce possède un déplacement spécifique. 
+            Une pièce ne peut jamais passer par-dessus une autre pièce excepté le cavalier.
+            <ul>
+              <li>Le roi peut se déplace sur n'importe quelle case adjacente à sa position.</li>
+              <li>La reine peut se déplacer diagonalement, horizontalement et verticalement d'autant de cases que souhaitées.</li>
+              <li>
+                Le cavalier peut sauter par-dessus les cases qui entourent sa position  (même s'il y a des pièces du même joueur) 
+                pour se placer sur une case de couleur opposée la plus proche.
+              </li>
+              <li>Le fou se déplace diagonalement d'autant de cases que souhaitées.</li>
+              <li>La tour se déplace horizontalement ou verticalement d'autant de cases que souhaitées.</li>
+              <li>
+                Le pion avance uniquement devant lui d'une seule case.
+                Lors de son premier déplacement, il peut exceptionnellement avancer d'une ou de deux cases. 
+                Pour prendre une pièce ennemie, il doit se déplacer en diagonale d'une seule case et vers le camp adverse. 
+              </li>
+            </ul>
+          </p>
+        </ul>
+        <h4>Le coup spécial possible</h4>
+        <ul>
+          <li>La promotion</li>
+          <p>
+            Quand un pion parvient jusqu'à la rangée la plus proche du joueur adverse, 
+            il se transforme en dame, en tour, en fou ou en cavalier selon le choix du joueur. 
+            La pièce promue est immédiatement opérationnelle.
+          </p>
+        </ul>
+      </div>
+    </section>
+  </body>
+</html>
