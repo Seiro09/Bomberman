@@ -1,29 +1,68 @@
 .login-form {
-  width: 300px;
   margin: 0 auto;
-  font-family: Tahoma, Geneva, sans-serif;
+  background: white;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 1px 20px 20px 20px;
+  width: 400px;
+  box-shadow: 10px 10px 5px grey;
+  border: 1px solid grey;
 }
+
 .login-form h1 {
+  background-size: 100%;
+  border-style: solid;
+  font-family: Brush Script MT;
+  border-color: white;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
   text-align: center;
-  color: #4d4d4d;
-  font-size: 24px;
-  padding: 20px 0 20px 0;
+  color: black;
+  font-size: 90px;
+  text-shadow: 10px 12px grey;
+  margin: 20px 0px 20px 0px;
 }
 .login-form input[type="password"],
 .login-form input[type="text"] {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
   width: 100%;
   padding: 15px;
-  border: 1px solid #dddddd;
+  border: 2px solid black;
   margin-bottom: 15px;
   box-sizing: border-box;
+  color: black;
 }
 .login-form button[type="submit"] {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
   width: 100%;
   padding: 15px;
-  background-color: #535b63;
+  background-color: black;
   border: 0;
   box-sizing: border-box;
   cursor: pointer;
   font-weight: bold;
   color: #ffffff;
+  margin: 5px 0px;
+}
+
+.login-form button[type="submit"]:hover {
+  background-color: grey;
+}
+
+body {
+  background-image: url(https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-size: 30px;
+  font-family: Gill Sans, sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }

@@ -2,41 +2,98 @@
 <html lang="fr">
   <head>
     <title>Chess : Mon compte</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/profil/profil.css">
-  </head>  
-  <body id = "body">
-    <section id = "accueil">
-      <div id = "box">
-        <p id = "infoSession"></p>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/profil/profil.css" />
+  </head>
+  <body id="body">
+    <section id="accueil">
+      <div id="box" class="profile-form">
+        <p id="infoSession"></p>
+        <p id="infoMatch"></p>
         <center>
-          <form id = "formAmi">
+          <form id="formAmi">
             <label>Ajouter un ami :</label>
-            <input type = "text" pattern = "([A-Za-z0-9_@])([A-Za-z0-9_@])+" title = "Entrez un pseudonyme comportant au moins 2 caractères appropriés" id = "pseudoSearch" placeholder = "Pseudonyme" value = "" required/>
-            <button type = "submit" id = "rechercher">_</button>
+            <input
+              type="text"
+              pattern="([A-Za-z0-9_@])([A-Za-z0-9_@])+"
+              title="Entrez un pseudonyme comportant au moins 2 caractères appropriés"
+              id="pseudoSearch"
+              placeholder="Pseudonyme"
+              value=""
+              required
+            />
+            <br />
+            <button type="submit" id="rechercher">
+              <svg
+                version="1.1"
+                id="Capa_1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                width="20px"
+                height="20px"
+                x="0px"
+                y="0px"
+                viewBox="0 0 513.28 513.28"
+                style="enable-background:new 0 0 513.28 513.28;"
+                xml:space="preserve"
+              >
+                <g>
+                  <g>
+                    <path
+                      d="M495.04,404.48L410.56,320c15.36-30.72,25.6-66.56,25.6-102.4C436.16,97.28,338.88,0,218.56,0S0.96,97.28,0.96,217.6
+			s97.28,217.6,217.6,217.6c35.84,0,71.68-10.24,102.4-25.6l84.48,84.48c25.6,25.6,64,25.6,89.6,0
+			C518.08,468.48,518.08,430.08,495.04,404.48z M218.56,384c-92.16,0-166.4-74.24-166.4-166.4S126.4,51.2,218.56,51.2
+			s166.4,74.24,166.4,166.4S310.72,384,218.56,384z"
+                    />
+                  </g>
+                </g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+                <g></g>
+              </svg>
+            </button>
           </form>
         </center>
         <p></p>
         <center>
-          <button title = "Recharger votre liste d'amis" id = "actualiser">Actualiser</button>
+          <button title="Recharger votre liste d'amis" id="actualiser">
+            Actualiser
+          </button>
           <p></p>
-          <table id = "amis">
-            <tr id = "columName">
-              <th>Statut</th>
-              <th>Nom de votre ami</th>
-              <th>Victoires</th>
-              <th>Défaites</th>
-              <th>Invitation</th>
-              <th>Supprimer</th>
+
+          <table id="amis">
+            <tr id="columName">
+              <thead>
+                <th>Statut</th>
+                <th>Nom de votre ami</th>
+                <th>Victoires</th>
+                <th>Défaites</th>
+                <th>Invitation</th>
+                <th>Supprimer</th>
+              </thead>
             </tr>
           </table>
         </center>
         <p>
-          <a href = "/accueil"><button>Retour à la page d'accueil</button></a>
+          <a href="/accueil"
+            ><button id="retour">Retour à la page d'accueil</button></a
+          >
         </p>
       </div>
     </section>
-    <script type = "text/javascript" src = "/socket.io/socket.io.js"></script>
-    <script type = "text/javascript" src = "/profil/profil.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/profil/profil.js"></script>
   </body>
 </html>

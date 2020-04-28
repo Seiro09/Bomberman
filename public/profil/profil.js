@@ -3,14 +3,14 @@ let formAmi = document.getElementById('formAmi');
 let table = document.getElementById("amis");
 //réinitialiser le contenu de la table d'amis
 var saveTable =
-    `<tr id = "columName">
+    `<thead>
       <th>Statut</th>
       <th>Nom de votre ami</th>
       <th>Victoires</th>
       <th>Défaites</th>
       <th>Invitation</th>
       <th>Supprimer</th>
-    </tr>`;
+    </thead>`;
 
 //initialiser le socket
 var socket = io.connect();
@@ -128,7 +128,6 @@ function ajoutAmis(table, ami) {
   let tr = document.createElement('tr');
   
   let tdConnecte = document.createElement('td');
-  tdConnecte.innerHTML = 'o';
   if(ami.connecte == 1) tdConnecte.setAttribute('class', 'amiConnecte');
   else tdConnecte.setAttribute('class', 'amiDeconnecte');
   tr.appendChild(tdConnecte);
@@ -149,6 +148,7 @@ function ajoutAmis(table, ami) {
   if(ami.connecte == 1){
     let buttonInvite = document.createElement('button');
     buttonInvite.innerHTML = 'Inviter';
+    buttonInvite.setAttribute('class', 'invite');
     buttonInvite.onclick = function(){
       inviteAmi(sessionStorage.getItem("username"), sessionStorage.getItem("mdp"), ami.username);
     }
@@ -161,7 +161,6 @@ function ajoutAmis(table, ami) {
   
   let tdsupp = document.createElement('td');
   let buttonSupp = document.createElement('button');
-  buttonSupp.innerHTML = 'X';
   buttonSupp.setAttribute('class', 'suppB');
   buttonSupp.onclick = function(){
     supprimeAmi(sessionStorage.getItem("username"), sessionStorage.getItem("mdp"), ami.username);

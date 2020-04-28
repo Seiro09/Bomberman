@@ -14,11 +14,10 @@
         <input id = "password2" type="password" placeholder="Confirmez votre mot de passe" required>
         <meter max="4" id="meter" value = "0"></meter>
         <label class = "petit">Force du mot de passe : <force id = "force">Aucune</force> <aide id = "aide" title = "">(?)</aide></label>
-        <p class = "petit">Votre mot de passe doit contenir au moins 8 caractères et une force au moins moyenne.</p>
+        <br><p class="rouge">Votre mot de passe doit contenir au moins 8 caractères et une force au moins moyenne.</p>
         <p id = "registerResult"></p>
 				<button id = "valider" type="submit">Valider</button>
 			</form>
-      <p></p>
       <a href = "/login"><button type="submit">Se connecter à un compte existant</button></a>
 		</div>
     <script type = "text/javascript" src = "/socket.io/socket.io.js"></script>

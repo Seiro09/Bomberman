@@ -1,30 +1,58 @@
 #body {
-  background-image: url('https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784');
-  background-repeat: no-repeat;
+  background-image: url(https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
-  font-size : 30px;
-  padding-top : 10%;
+  font-size: 30px;
+  font-family: Gill Sans, sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-button, input {
-  font-size : 25px;
-  border-style : solid;
-  background-color : white;
+button,
+input {
+  font-size: 25px;
+  border-style: solid;
+  background-color: white;
   border-radius: 10px;
 }
 
 #banniereTable {
-  border-style : outset;
-  border-radius: 30px;
-  margin : auto;
-  width : 60%;
-  overflow : auto;
-  background-color : grey;
+  margin: 0 auto;
+  font-family: Tahoma, Geneva, sans-serif;
+  background: white;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 2px 20px 20px 20px;
+  width: 400px;
+  box-shadow: 10px 10px 5px grey;
+  border: 1px solid grey;
 }
 
 p {
-  text-align : center;
-  font-family : Gill Sans, sans-serif;
+  text-align: center;
+  font-family: Brush Script MT;
+  font-size: 35px;
+}
+
+.attente button {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 100%;
+  padding: 15px;
+  background-color: black;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.attente button:hover {
+  background-color: grey;
 }
 
 .lds-dual-ring {
@@ -39,7 +67,7 @@ p {
   height: 64px;
   margin: 8px;
   border-radius: 50%;
-  border: 6px solid #fff;
+  border: 10px solid #fff;
   border-color: #000 transparent #000 transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
