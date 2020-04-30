@@ -4,7 +4,7 @@ let form2 = document.getElementById("banniereTable");
 //expiration de session au bout de 5 min
 setTimeout(function(){
   sessionStorage.clear();
-  alert("Votre session a expiré. veuillez vous reconnecter " + window.location.host);
+  alert("Votre session a expiré. veuillez vous reconnecter ");
   window.location.host = window.location.host + "/login";
 },300*1000);
 
