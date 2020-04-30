@@ -35,7 +35,8 @@
   font-size: 20px;
 }
 
-.index select, option {
+.index select,
+option {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
@@ -46,17 +47,34 @@
   background-color: black;
 }
 
-#banniereTable {
-  margin: 0 auto;
-  font-family: Tahoma, Geneva, sans-serif;
-  background: white;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  padding: 2px 20px 20px 20px;
-  width: 400px;
-  box-shadow: 10px 10px 5px grey;
-  border: 1px solid grey;
+@media all and (orientation: portrait) {
+  #banniereTable {
+    margin: 0 auto;
+    font-family: Tahoma, Geneva, sans-serif;
+    background: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 20px 20px 20px;
+    width: 80%;
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+  }
+}
+
+@media all and (orientation: landscape) {
+  #banniereTable {
+    margin: 0 auto;
+    font-family: Tahoma, Geneva, sans-serif;
+    background: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 20px 20px 20px;
+    width: 50%;
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+  }
 }
 
 .index h1 {
@@ -72,7 +90,6 @@
   font-size: 40px;
   padding: 20px 0 20px 0;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-    
 }
 
 #titre {
@@ -235,4 +252,22 @@
   border: 1px solid black;
   padding: 5px;
   font-weight: bold;
+}
+
+#chessmate {
+  font-family: impact;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  font-size: 10vh;
+  margin: 20px 0px 20px 0px;
+  background: -webkit-linear-gradient(black, white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: left;
+}
+
+#logo {
+  fill: white;
+  filter: drop-shadow(2px 3px 2px black);
 }

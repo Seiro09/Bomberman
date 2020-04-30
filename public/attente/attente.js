@@ -1,5 +1,12 @@
 let form = document.getElementById('form');
 
+//expiration de session au bout de 5 min
+setTimeout(function(){
+  sessionStorage.clear();
+  alert("Votre session a expiré. veuillez vous reconnecter " + window.location.host);
+  window.location.host = window.location.host + "/login";
+},300*1000);
+
 //vérifie si le joueur est connecté dans ce cas, il transmet ses informations de connexion au server.
 //dans le cas contraire il est renvoyé vers la page de connexion
 (function testLogin() {

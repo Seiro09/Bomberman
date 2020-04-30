@@ -1,15 +1,95 @@
-#accueil {
-  width : 35%;
-  margin : auto;
-  background-color : white;
-  box-shadow: 6px 6px 6px #444;
-  border: 1px #999 solid;
-  padding-left : 5%;
-  padding-right : 5%;
+@media all and (orientation: landscape) {
+  #accueil {
+    width: 60%;
+    background-color: white;
+    box-shadow: 6px 6px 6px #444;
+    border: 1px grey solid;
+    font-size: 3vh;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5% 10%;
+  }
+
+  #titre {
+    font-family: impact;
+    font-size: 7vh;
+  }
+
+  #retour {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    width: 60%;
+    padding: 20px;
+    background-color: black;
+    border: 0;
+    box-sizing: border-box;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 5px 0px;
+    cursor: pointer;
+  }
+}
+
+@media all and (orientation: portrait) {
+  #accueil {
+    width: 70%;
+    background-color: white;
+    box-shadow: 6px 6px 6px #444;
+    border: 1px grey solid;
+    font-size: 3vh;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5% 5%;
+  }
+
+  #titre {
+    font-family: impact;
+    font-size: 5vw;
+  }
+
+  #retour {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    width: 70%;
+    padding: 15px;
+    background-color: black;
+    border: 0;
+    box-sizing: border-box;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 5px 0px;
+    cursor: pointer;
+  }
 }
 
 #body {
-  background-image: url('https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784');
-  background-repeat: no-repeat;
+  background-image: url(https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784);
   background-size: cover;
+  font-size: 2vw;
+  font-family: Gill Sans, sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+#retour:hover {
+  background-color: grey;
+}
+
+#chessmate {
+  font-family: impact;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  font-size: 10vh;
+  margin: 20px 0px 20px 0px;
+  background: -webkit-linear-gradient(black, white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#logo {
+  fill: white;
+  filter: drop-shadow(2px 3px 2px black);
 }

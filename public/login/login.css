@@ -1,29 +1,44 @@
-.login-form {
-  margin: 0 auto;
-  background: white;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  padding: 1px 20px 20px 20px;
-  width: 400px;
-  box-shadow: 10px 10px 5px grey;
-  border: 1px solid grey;
+@media all and (orientation: portrait) {
+  .login-form {
+    margin: 0 auto;
+    background: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 1px 20px 20px 20px;
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+    width: 70%;
+  }
 }
 
-.login-form h1 {
-  background-size: 100%;
+@media all and (orientation: landscape) {
+  .login-form {
+    margin: 0 auto;
+    background: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 1px 20px 20px 20px;
+    width: 50%;
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+  }
+}
+
+.login-form h1[id="title"] {
   border-style: solid;
-  font-family: Brush Script MT;
+  font-family: impact;
   border-color: white;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   text-align: center;
   color: black;
-  font-size: 90px;
-  text-shadow: 10px 12px grey;
+  font-size: 7vh;
   margin: 20px 0px 20px 0px;
 }
+
 .login-form input[type="password"],
 .login-form input[type="text"] {
   -moz-border-radius: 5px;
@@ -62,7 +77,24 @@ body {
   -o-background-size: cover;
   background-size: cover;
   font-size: 30px;
-  font-family: Gill Sans, sans-serif;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+
+#chessmate {
+  font-family: impact;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  font-size: 10vh;
+  margin: 20px 0px 20px 0px;
+  background: -webkit-linear-gradient(black, white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+}
+
+#logo {
+  fill:white;
+  filter: drop-shadow(2px 3px 2px black);
 }

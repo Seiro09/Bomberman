@@ -6,10 +6,45 @@
     <link rel="stylesheet" href="/regles/regles.css">
   </head>  
   <body id = "body">
-    <center><a href = "/accueil"><button>Retour à la page d'accueil</button></a></center>
-    <br/>
-    <section id = "accueil">
-      <center><h1>Règles du jeu d'Echec</h1></center>
+     <div id="chessmate">
+      ChessMate
+      <svg
+        id="logo"
+        enable-background="new 0 0 512 512"
+        viewBox="0 0 512 512"
+        width="50px"
+        height="50px"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m351.334 255.934h98.533c17.719 0 32.133-14.414 32.133-32.133s-14.414-32.135-32.133-32.135h-98.533c-17.719 0-32.135 14.416-32.135 32.135s14.416 32.133 32.135 32.133z"
+        />
+        <path
+          d="m351.334 285.934c-.943 0-1.881-.028-2.813-.07l-10.99 131.871h126.139l-10.99-131.871c-.934.042-1.869.07-2.813.07z"
+        />
+        <path
+          d="m304.199 447.734v49.266c0 8.285 6.715 15 15 15h162.801c8.283 0 15-6.715 15-15v-49.266z"
+        />
+        <path
+          d="m333.457 161.74c.955-.044 1.912-.074 2.877-.074h128.533c.965 0 1.922.03 2.877.074l11.676-46.701c1.119-4.48.113-9.228-2.73-12.869-2.842-3.641-7.203-5.77-11.822-5.77h-49.268v-34.267h17.135c8.283 0 15-6.715 15-15 0-8.283-6.717-15-15-15h-17.135v-17.133c0-8.283-6.717-15-15-15-8.285 0-15 6.717-15 15v17.133h-17.133c-8.285 0-15 6.717-15 15 0 8.285 6.715 15 15 15h17.133v34.267h-49.266c-4.619 0-8.981 2.129-11.824 5.77-2.842 3.642-3.848 8.389-2.728 12.869z"
+        />
+        <path
+          d="m62.133 350.199c-1.609 0-3.197-.08-4.775-.201l-8.467 67.736h125.018l-8.467-67.736c-1.578.121-3.168.201-4.775.201z"
+        />
+        <path
+          d="m62.133 320.199h98.533c17.719 0 32.135-14.414 32.135-32.133 0-17.717-14.416-32.133-32.135-32.133h-98.533c-17.719.001-32.133 14.417-32.133 32.133 0 17.719 14.414 32.133 32.133 32.133z"
+        />
+        <path
+          d="m15 497c0 8.285 6.715 15 15 15h162.801c8.283 0 15-6.715 15-15v-49.266h-192.801z"
+        />
+        <path
+          d="m172.619 225.934c11.266-13.686 18.047-31.195 18.047-50.268 0-43.707-35.559-79.266-79.266-79.266-43.709 0-79.268 35.559-79.268 79.266 0 19.072 6.781 36.581 18.045 50.268z"
+        />
+      </svg>
+    </div>
+   
+    <div id = "accueil">
+      <center><h1 id="titre">Règles du jeu d'Echec</h1></center>
       <div id = "regles">
         <h4>Principe du jeu</h4>
         <ul><p>
@@ -69,6 +104,16 @@
           </ul>
         </ul>
       </div>
-    </section>
+    </div>
+    <center><a href = "/accueil"><button id="retour">Retour à la page d'accueil</button></a></center>
+    <br/>
+    <script type = "text/javascript">
+    //expiration de session au bout de 5 min
+      setTimeout(function(){
+        sessionStorage.clear();
+        alert("Votre session a expiré. veuillez vous reconnecter " + window.location.host);
+        window.location.host = window.location.host + "/login";
+      },300*1000);
+    </script>
   </body>
 </html>

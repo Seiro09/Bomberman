@@ -519,10 +519,10 @@ class Pawn extends Pion {
       let formulaire = 
         '<form id = "evolve">\
           <select id = "selectEvolve">\
-            <option value = "Knight">Knight</option>\
-            <option value = "Bishop">Bishop</option>\
-            <option value = "Queen">Queen</option>\
-            <option value = "Rook">Rook</option>\
+            <option value = "Knight">Cavalier</option>\
+            <option value = "Bishop">Fou</option>\
+            <option value = "Queen">Reine</option>\
+            <option value = "Rook">Tour</option>\
           </select>\
           <button id = "buttonEvolve" type = "submit">Valider le nouveau type</button>\
         </form>';

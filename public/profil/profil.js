@@ -1,3 +1,10 @@
+//expiration de session au bout de 5 min
+setTimeout(function(){
+  sessionStorage.clear();
+  alert("Votre session a expiré. veuillez vous reconnecter " + window.location.host);
+  window.location.host = window.location.host + "/login";
+},300*1000);
+
 //formulaire et table d'ami de la page
 let formAmi = document.getElementById('formAmi');
 let table = document.getElementById("amis");
@@ -111,9 +118,10 @@ socket.on('infosJoueur', function(message) {
       sessionStorage.setItem("victoires", infos.victoires);
       sessionStorage.setItem("defaites", infos.defaites);
       var string = "Profil de " + infos.username + "</br>";
-      string += 'Victoires : ' + infos.victoires + "</br>";
-      string += 'Défaites : ' + infos.defaites;
+      var string2 = 'Victoires : ' + infos.victoires + "</br>";
+      string2 += 'Défaites : ' + infos.defaites;
       document.getElementById('infoSession').innerHTML = string;
+        document.getElementById('infoMatch').innerHTML = string2;
     }
     else if(infos.type = "amis") {
       for(let i = 0; i < infos.amis.length; i++){

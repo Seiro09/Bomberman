@@ -4,13 +4,85 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  font-size: 30px;
-  font-family: Gill Sans, sans-serif;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
-@media all and (orientation: landscape) {
+@media all and (min-width:700px) {
+  .profile-form {
+    margin: 0 auto;
+    font-family: Tahoma, Geneva, sans-serif;
+    background: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 20px 20px 20px;
+    width: 700px;
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+  }
+
+  #rechercher {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 11px 50px;
+    background-color: black;
+    fill: white;
+    border-color: white;
+    float: right;
+    box-sizing: border-box;
+    border: 2px solid black;
+  }
+
+  #amis {
+    border: 1px solid grey;
+    width: 500px;
+    background-color: black;
+  }
+
+  #amis td {
+    font-size: 14px;
+    background-color: white;
+    text-align: center;
+    wdith: 250px;
+  }
+
+  #amis thead {
+    font-size: 14px;
+    color: white;
+    background-color: grey;
+  }
+
+  #amis th:nth-child(odd) {
+    color: #ffffff;
+    background: black;
+  }
+
+  .suppB {
+    font-weight: bold;
+    text-align: center;
+    padding: 15px 37px;
+    background-color: black;
+    border-color: white;
+    color: white;
+    background-image: url("https://cdn.glitch.com/b4544041-a4c4-4f79-a5ed-ea7fd0c85532%2Fclose.png?v=1588086097561");
+    background-size: 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .invite {
+    font-weight: bold;
+    text-align: center;
+    padding: 7px 16px;
+    background-color: black;
+    border-color: white;
+    color: white;
+  }
+}
+
+@media all and (min-width:500px) and (max-width:700px) {
   .profile-form {
     margin: 0 auto;
     font-family: Tahoma, Geneva, sans-serif;
@@ -25,9 +97,6 @@
   }
 
   #rechercher {
-    /* background-size: 100%;
-  background-image: url("https://cdn.glitch.com/139185a8-2845-442f-9b69-25bf7b642875%2Floupe.png?v=1587919373754");
-  color: white;*/
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
@@ -79,14 +148,14 @@
   .invite {
     font-weight: bold;
     text-align: center;
-    padding: 8px 18px;
+    padding: 7px 16px;
     background-color: black;
     border-color: white;
     color: white;
   }
 }
 
-@media all and (orientation: portrait) {
+@media all and (max-width:500px) {
   .profile-form {
     margin: 0 auto;
     font-family: Tahoma, Geneva, sans-serif;
@@ -101,9 +170,6 @@
   }
 
   #rechercher {
-    /* background-size: 100%;
-  background-image: url("https://cdn.glitch.com/139185a8-2845-442f-9b69-25bf7b642875%2Floupe.png?v=1587919373754");
-  color: white;*/
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
@@ -154,7 +220,7 @@
   .invite {
     font-weight: bold;
     text-align: center;
-    padding: 6px 12%;
+    padding: 5px 10%;
     background-color: black;
     border-color: white;
     color: white;
@@ -165,14 +231,14 @@
   font-size: 38px;
   text-align: center;
   font-weight: bold;
-  font-family: Brush Script MT;
+  font-family: Impact;
   margin: 5px 0px;
 }
 
 .profile-form p[id="infoMatch"] {
   font-size: 25px;
   text-align: center;
-  font-family: Brush Script MT;
+  font-family: impact;
   margin: 0px;
 }
 
@@ -245,5 +311,23 @@ table {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   table-layout: fixed;
-  width: 100%;
+  width: auto;
+}
+
+#chessmate {
+  font-family: impact;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  font-size: 10vh;
+  margin: 20px 0px 20px 0px;
+  background: -webkit-linear-gradient(black, white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+}
+
+#logo {
+  fill:white;
+  filter: drop-shadow(2px 3px 2px black);
 }
