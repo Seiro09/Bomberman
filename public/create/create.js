@@ -3,6 +3,13 @@ var codeSalon = getRandomCode();
 //stocke l'id du bouton sur lequel on a cliqué
 var choix = '';
 
+//expiration de session au bout de 5 min
+setTimeout(function(){
+  sessionStorage.clear();
+  alert("Votre session a expiré. veuillez vous reconnecter ");
+  window.location.host = window.location.host + "/login";
+},300*1000);
+
 let form = document.getElementById('banniereTable');
 
 //vérifie la connexion du client

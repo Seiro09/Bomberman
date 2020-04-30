@@ -157,7 +157,6 @@
   }
 }
 
-
 body {
   background-image: url(https://cdn.glitch.com/f9bbb43b-e246-41af-8d93-e8d7f3cee10c%2Fchess-wallpaper.png?v=1584719088784);
   -webkit-background-size: cover;
@@ -168,4 +167,59 @@ body {
   font-family: Gill Sans, sans-serif;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+
+#chessmate {
+  font-family: impact;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  font-size: 10vh;
+  margin: 20px 0px 20px 0px;
+  background: -webkit-linear-gradient(black, white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#logo {
+  fill: white;
+  filter: drop-shadow(2px 3px 2px black);
+}
+
+select,
+option {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 20vh;
+  text-align: center;
+  font-size: 3vh;
+  padding: 10px;
+  background-color: white;
+  border: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+}
+
+button[id="buttonEvolve"] {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  width: 40vh;
+  padding: 10px;
+  text-align: center;
+  font-size: 3vh;
+  background: linear-gradient(to right, black, grey);
+  border: 1px solid white;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+}
+
+button[id="buttonEvolve"]:hover {
+  background: grey;
+  color: white;
 }

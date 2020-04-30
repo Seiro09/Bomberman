@@ -11,25 +11,41 @@
 }
 
 input[id="afficheCode"] {
-  font-size : 20px;
-  border-style : solid;
-  background-color : white;
+  font-size: 20px;
+  border-style: solid;
+  background-color: white;
   width: 90%;
   border-radius: 10px;
   margin: auto;
 }
+@media all and (orientation: portrait) {
+  #banniereTable {
+    margin: 0 auto;
+    font-family: Tahoma, Geneva, sans-serif;
+    background: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 20px 20px 20px;
+    width: 80%;
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+  }
+}
 
-#banniereTable {
-  margin: 0 auto;
-  font-family: Tahoma, Geneva, sans-serif;
-  background: white;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  padding: 2px 20px 20px 20px;
-  width: 400px;
-  box-shadow: 10px 10px 5px grey;
-  border: 1px solid grey;
+@media all and (orientation: landscape) {
+  #banniereTable {
+    margin: 0 auto;
+    font-family: Tahoma, Geneva, sans-serif;
+    background: white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 20px 20px 20px;
+    width: 50%;
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+  }
 }
 
 #afficheCode {
@@ -37,7 +53,12 @@ input[id="afficheCode"] {
   padding: 2px 15px 2px 15px;
 }
 
-.create button[id="aleatoire"]{
+.create {
+  font-size: 8vh;
+   margin: 0px 0px 0px 0px;
+}
+
+.create button[id="aleatoire"] {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
@@ -51,7 +72,7 @@ input[id="afficheCode"] {
   color: #ffffff;
 }
 
-.create button[id="codeSalon"]{
+.create button[id="codeSalon"] {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
@@ -65,7 +86,7 @@ input[id="afficheCode"] {
   color: #ffffff;
 }
 
-.create button[id="launch"]{
+.create button[id="launch"] {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
@@ -79,7 +100,7 @@ input[id="afficheCode"] {
   color: #ffffff;
 }
 
-.create button[id="retourAccueil"]{
+.create button[id="retourAccueil"] {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
@@ -91,7 +112,6 @@ input[id="afficheCode"] {
   cursor: pointer;
   font-weight: bold;
   color: #ffffff;
-  margin: 20px 0px 0px 0px;
 }
 
 .create button[type="submit"]:hover {
@@ -108,32 +128,51 @@ input[id="afficheCode"] {
   border-radius: 5px;
   text-align: center;
   color: black;
-  font-size: 30px;
+  font-size: 7vw;
   padding: 20px 0 20px 0;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   font-weight: bold;
 }
 
 hr {
-    display: block; 
-    border: 0;
-    border-top: 2px solid grey;
-    margin: 5px ;
-    padding: 0;
+  display: block;
+  border: 0;
+  border-top: 2px solid grey;
+  margin: 5px;
+  padding: 0;
 }
 
- p[id="row1"] {
-  text-align : center;
-  font-family :  Brush Script MT;
+p[id="row1"] {
+  text-align: center;
+  font-family: Impact;
   font-weight: bold;
-  font-size: 35px;
+  font-size: 7vh;
 }
 
 p[id="row2"] {
-  text-align : center;
-  font-family : Tahoma, Geneva, sans-serif;
+  text-align: center;
+  font-family: Tahoma, Geneva, sans-serif;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 5vh;
 }
 
+#chessmate {
+  font-family: impact;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  font-size: 10vh;
+  margin: 20px 0px 20px 0px;
+  background: -webkit-linear-gradient(black, white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
+#logo {
+  fill: white;
+  filter: drop-shadow(2px 3px 2px black);
+}
+
+.create p {
+    margin: 0px 0px 20px 0px;
+}

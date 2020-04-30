@@ -18,6 +18,7 @@ input {
   border-radius: 10px;
 }
 
+@media all and (orientation: landscape) {
 #banniereTable {
   margin: 0 auto;
   font-family: Tahoma, Geneva, sans-serif;
@@ -26,15 +27,33 @@ input {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   padding: 2px 20px 20px 20px;
-  width: 400px;
+  width:  50%;
+  height: 80%
   box-shadow: 10px 10px 5px grey;
   border: 1px solid grey;
+}
+}
+
+@media all and (orientation: portrait) {
+#banniereTable {
+  margin: 0 auto;
+  font-family: Tahoma, Geneva, sans-serif;
+  background: white;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 2px 20px 20px 20px;
+  width:  80%;
+  height: 60%
+  box-shadow: 10px 10px 5px grey;
+  border: 1px solid grey;
+}
 }
 
 p {
   text-align: center;
-  font-family: Brush Script MT;
-  font-size: 35px;
+  font-family: Impact;
+  font-size: 7vh;
 }
 
 .attente button {
@@ -78,4 +97,21 @@ p {
   100% {
     transform: rotate(360deg);
   }
+}
+
+#chessmate {
+  font-family: impact;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  font-size: 10vh;
+  margin: 20px 0px 20px 0px;
+  background: -webkit-linear-gradient(black, white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#logo {
+  fill: white;
+  filter: drop-shadow(2px 3px 2px black);
 }
